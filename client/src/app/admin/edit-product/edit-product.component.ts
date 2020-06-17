@@ -16,7 +16,7 @@ export class EditProductComponent implements OnInit {
   public id: number;
   public categories: CategoriesModel[];
   public error: string;
-  public previewImage:any = null;
+  public previewImage: any = null;
 
   constructor(private myActivatedRoute: ActivatedRoute, private myProductsService: ProductsService, private myRouter: Router) {
     // disabled issue when moving from one item to another, without this the view doesn't change on route because it's using same route nd just the id changes
@@ -40,48 +40,50 @@ export class EditProductComponent implements OnInit {
         this.product.productPrice = 0;
         return;
       }
-      if (this.product.productName.length < 2 || this.product.productCategoryId <= 0 || !this.product.productImage) {
+      if (this.product.productName.length < 2 || this.product.productCategoryId <= 0) {
         this.error = "Fields can't be empty"
         return;
       }
       this.error = '';
-
-      if (this.product.productImage.size> 1000000) {
-        this.error = "Max File size is 1 mb"
+      if (this.product.productImage) {
+        if (this.product.productImage.size > 1000000) {
+          this.error = "Max File size is 1 mb"
+        }
       }
       this.error = '';
 
       const updatedProduct = await this.myProductsService.updateProductAsync(this.product);
-      if(updatedProduct) {
+      if (updatedProduct) {
         this.myProductsService.getStoreUpdateAdmin();
       }
       this.error = '';
-      setTimeout(() => this.myRouter.navigateByUrl("/shop"),1000);
+      setTimeout(() => this.myRouter.navigateByUrl("/shop"), 1000);
     }
     catch (err) {
       this.error = "Please Try again";
+      console.log(err);
     }
   }
 
 
- 
-public handleFileInput(files: FileList) {
-      this.product.productImage = files.item(0);
-      this.preview();
-}
- 
-public preview() {
+
+  public handleFileInput(files: FileList) {
+    this.product.productImage = files.item(0);
+    this.preview();
+  }
+
+  public preview() {
     // Show preview 
     const mimeType = this.product.productImage.type;
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
- 
-    const reader = new FileReader();      
-    reader.readAsDataURL(this.product.productImage); 
-    reader.onload = (_event) => { 
-      this.previewImage = reader.result; 
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.product.productImage);
+    reader.onload = (_event) => {
+      this.previewImage = reader.result;
     }
-}
+  }
 
 }

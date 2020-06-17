@@ -23,7 +23,7 @@ async function getOneProductAsync(id) {
 // create new product
 async function addProductAsync(product, fileName) {
     const sql = "INSERT INTO products VALUES(DEFAULT, ?, ?, ?, ?)";
-    const info = await dal.executeAsync(sql,[product.productName, product.productCategoryId, product.productPrice, fileName]);
+    const info = await dal.executeAsync(sql, [product.productName, product.productCategoryId, product.productPrice, fileName]);
     product.id = info.insertId;
     return product;
 }
@@ -35,10 +35,37 @@ async function updateFullProductAsync(product, fileName) {
     return info.affectedRows === 0 ? null : product;
 }
 
+async function updatePartialProductAsync(product, fileName) {
+
+    let sql = "UPDATE products SET ";
+
+    if (product.productName) {
+        sql += `product_name = '${product.productName}',`
+    }
+    if (product.productCategoryId) {
+        sql += ` product_category_id = '${product.productCategoryId}',`
+    }
+    if (product.productPrice) {
+        sql += `product_price = '${product.productPrice}',`
+    }
+    if (fileName.length > 0) {
+        sql += `product_image = '${fileName}',`
+    }
+
+// Delete last comma from string: 
+sql = sql.substr(0, sql.length - 1);
+
+sql += ` WHERE id = '${product.productId}'`;
+
+const info = await dal.executeAsync(sql);
+return info.affectedRows === 0 ? null : product;
+}
+
 
 module.exports = {
     getAllProductsAsync,
     getOneProductAsync,
     addProductAsync,
-    updateFullProductAsync
+    updateFullProductAsync,
+    updatePartialProductAsync
 };

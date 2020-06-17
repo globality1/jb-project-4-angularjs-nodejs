@@ -125,16 +125,19 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
                     response.status(500).send("Data can't be Empty or Bellow 0");
                     return;
                 }
+                const fileName = ''
+                if (request.files) {
                 // create separate file object
                 const uploadFile = request.files.productImage;
                 // get file extension
                 const extension = uploadFile.name.substr(uploadFile.name.lastIndexOf("."));
                 // generate new name for file with correct extension
-                const fileName = uuid.v4() + extension;
+                fileName = uuid.v4() + extension;
                 // push file into upload folder under new name
                 uploadFile.mv("./uploads/products/" + fileName);
+                }
                 // send product with new file name to be added in the data source
-                const updatedProduct = await productsLogic.updateFullProductAsync(product, fileName);
+                const updatedProduct = await productsLogic.updatePartialProductAsync(product, fileName);
                 // const addedProduct = await productsLogic.addProductAsync(product);
                 // return 201 and the added product response
                 response.status(201).json(updatedProduct);

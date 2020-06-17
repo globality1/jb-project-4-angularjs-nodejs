@@ -45,7 +45,9 @@ export class ProductsService {
         productForm.append('productName', product.productName);
         productForm.append('productPrice', product.productPrice.toString());
         productForm.append('productCategoryId', product.productCategoryId.toString());
-        productForm.append('productImage', product.productImage);
+        if(product.productImage) {
+            productForm.append('productImage', product.productImage);
+        }
         return this.http.put<ProductModel>("http://localhost:3000/api/products/" + product.id, 
         productForm, 
               // patch for formdata in angular so the server will know to read the data

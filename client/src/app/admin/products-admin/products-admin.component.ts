@@ -17,10 +17,13 @@ export class ProductsComponentAdmin implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // subscribe for store changes
+    store.subscribe(() => {
+      this.products = store.getState().products;
+      this.shopCategories = store.getState().shopCategories;
+    })
     // get products from store on init
-    
     this.products = store.getState().products;
-
     this.shopCategories = store.getState().shopCategories;
   }
   
