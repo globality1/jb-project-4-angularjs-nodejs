@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <div class="jumbotron mainTitle">
+        <h1 *ngIf="allowEdit">Your Cart</h1>
+        <h1 *ngIf="!allowEdit">Your Order Information</h1>
+    </div>
+    <div class="jumbotron cartInfo">
+        <div *ngIf="!cartProducts">
+            Your Cart is Empty
+        </div>
+        <div *ngIf="!allowEdit" class="searchProductsInOrder">
+            <span>
+                Search products in cart:
+            </span>
+            <mat-form-field>
+                <input matNativeControl type="text" name="highlightSearch" [(ngModel)]="searchValue" (input)="highlightSearch($event)">
+            </mat-form-field>
+        </div>
+        <div *ngIf="allowEdit" class="empty-cart">
+            <button mat-button (click)="cleanCart()"><img src="http://localhost:3000/api/images/main/trash.png" width="35" height="35" alt="trash"></button>
+        </div>
+        <div class="row">
+            <div class="col-1">
+            </div>
+            <div class="col-3 cartItemsInformation">
+                Name
+            </div>
+            <div class="col-2 cartItemsInformation">
+                Qt.
+            </div>
+            <div class="col-3 cartItemsInformation">
+                Price
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div  *ngIf="cartProducts" class="innerCartItemInformation container">
+            <div *ngFor="let p of cartProducts" class="cartItemInfo row">
+                <div class="col-8">
+                    <app-cart-item itemId={{p.id}} productName={{p.productName}} totalPrice={{p.totalPrice}}
+                        productQuantity={{p.quantity}} productImageName={{p.productImageName}} highlight={{p.highlight}} searchValue={{searchValue}}>
+                    </app-cart-item>
+                </div>
+                <div *ngIf="allowEdit" class="col-2 removeButtonDiv">
+                    <button class="removeItemButton" mat-raised-button color="warn"
+                        (click)="removeItemFromCart(p.id)">X</button>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div class="orderSection">
+            <div>Total : {{cartTotalAmount || 0 | currency:'ILS'}}</div>
+            <br>
+            <button *ngIf="cartProducts.length && allowEdit" class="btn btn-success" (click)="moveToCheckOut()">Order
+                Now</button>
+            <button *ngIf="!allowEdit" class="btn btn-success" (click)="moveBackToShop()">Return To Shop</button>
+        </div>
+    </div>

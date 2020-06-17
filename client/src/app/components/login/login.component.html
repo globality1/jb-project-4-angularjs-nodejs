@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="jumbotron">
+        <h2>Login</h2>
+        <!-- ngform module based on angular materials -->
+        <form #formInfo="ngForm">
+
+            
+            <mat-form-field>
+                <input matInput type="text" placeholder="Email..." name="email" [(ngModel)]="credentials.email" required
+                    autofocus #emailLogin="ngModel">
+                <mat-error *ngIf="emailLogin.errors?.required && emailLogin.touched">Missing Email</mat-error>
+                <mat-error *ngIf="errors.email">{{errors.email}}</mat-error>
+            </mat-form-field>
+            <br><br>
+
+            <mat-form-field>
+                <input matInput type="password" placeholder="Password..." name="password"
+                    [(ngModel)]="credentials.password" required #passwordLogin="ngModel" autofocus>
+                <mat-error *ngIf="passwordLogin.errors?.required && passwordLogin.touched">Missing Password</mat-error>
+                <mat-error *ngIf="errors.password">{{errors.password}}</mat-error>
+            </mat-form-field>
+            <br><br>
+
+
+
+            <button mat-raised-button color="primary" [disabled]="formInfo.form.invalid"
+                (click)="validateForm()">Login</button>
+            <div class="errorsDisplay" *ngIf="errors.login">{{errors.login}}</div>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <!-- account do not exist - registration -->
+            <p class="noAccount">New to our shop? <a mat-raised-button routerLink="/register" routerLinkActive="active">Open Account</a>
+            </p>
+
+        </form>
+    </div>
+</div>

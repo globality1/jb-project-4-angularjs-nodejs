@@ -1,0 +1,40 @@
+<div class="card" *ngIf="!isAdmin" data-toggle="modal" [attr.data-target]="'#productQuantity' + productId">
+    <div class="headerImage">
+        <img class="productImage" [src]="'http://localhost:3000/api/images/products/'+imageSource" [alt]="imageSource">
+    </div>
+    <h5 class="card-title">{{productName}}</h5>
+    <div class="card-text">
+        <div class="priceDiv">Price: {{productPrice | currency:'ILS'}}</div>
+    </div>
+</div>
+
+
+<!-- Modal for quantity selection of the product amount-->
+<div class="modal fade" [id]="'productQuantity' + productId" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quantityModal">{{productName}} Quantity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #QuantityForm="ngForm">
+                <div>
+                    Please enter amount: <input type="number" [(ngModel)]="newCartItem.quantity" placeholder="Qt."
+                        min="0" required name="quantityField">
+                </div>
+                <br />
+                <div class="alert alert-danger" *ngIf="newCartItem.quantity <= 0">Quantity should be above 0</div>
+            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+                <button type="button" class="btn btn-primary" (click)="addProductToCart()" data-dismiss="modal" [disabled]="QuantityForm.form.invalid">Add To
+                    Cart</button>
+            </div>
+        </div>
+    </div>
+</div>

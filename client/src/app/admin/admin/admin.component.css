@@ -1,0 +1,9 @@
+.shopDiv {
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+.addProductButtonDiv {
+    float: right;
+    margin-top: -45px;
+}

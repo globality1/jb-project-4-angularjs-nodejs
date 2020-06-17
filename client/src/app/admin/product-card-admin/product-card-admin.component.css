@@ -1,0 +1,21 @@
+.productImage {
+    height: 120px;
+    width: 70%;
+}
+
+.addToCartButton {
+    display: none;
+}
+
+.error {
+    color: red;
+}
+
+
+.card:hover + .addToCartButton, .addToCartButton:hover {
+    display: inline-block;
+}
+
+.card:hover {
+    cursor: pointer;
+}

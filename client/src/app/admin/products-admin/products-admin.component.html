@@ -1,0 +1,29 @@
+<div class="container-fluid-filters container-fluid">
+    <div class="jumbotron-filters jumbotron">
+        <div class="productsSearch">
+            <span>Search: </span><input type="text" (input)="filterProductsBySearch()" name="search" placeholder="Search Product..." [(ngModel)]="searchValue">
+        </div>
+        <br/>
+        <div>
+            <div class="row categoriesFilter">
+                <button class="categoryButton" mat-stroked-button color="primary" (click)="filterProductsByCategory()">All</button>
+                <div *ngFor="let c of shopCategories">
+                    <button class="categoryButton" mat-stroked-button color="primary" (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid-products container-fluid">
+    <div class="jumbotron-products jumbotron">
+        <div *ngIf="!products.length">No Products Found</div>
+        <div *ngIf="products">
+            <div *ngFor="let p of products">
+                <app-product-card-admin [id]="'cardOfProductId' + p.id" productId={{p.id}} imageSource={{p.productImageName}}
+                    productName={{p.productName}} productPrice={{p.productPrice}}>
+                </app-product-card-admin>
+            </div>
+        </div>
+    </div>
+</div>

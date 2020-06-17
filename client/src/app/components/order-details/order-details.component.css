@@ -1,0 +1,16 @@
+.mainTitle, .jumbotron {
+    text-align: center;
+}
+
+.paymentDisplay {
+    height: 80%;
+}
+
+.detailsDiv {
+   margin-top: -40px;
+}
+
+.detailsFillInButton {
+    float: right;
+    margin-left: 1%;
+}

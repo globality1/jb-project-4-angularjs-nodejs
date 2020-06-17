@@ -1,0 +1,49 @@
+app-product-card-admin {
+    float: right;
+    width: 12%;
+    margin-right: 30px;
+    margin-top: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 2px 2px black;
+    border-radius: 10px;
+    min-width: 150px;
+}
+
+.container-fluid-products {
+    height: 80%!important;
+    overflow: hidden;
+    max-height: 450px;
+    margin: 10px;
+}
+
+.jumbotron-products {
+    overflow: auto;
+    height: 100%!important;
+    height: 400px;
+}
+
+.categoriesFilter {
+    text-align: center;
+    display: inline-flex;
+}
+
+
+.container-fluid-filters {
+    height: 100%!important;
+    overflow: hidden;
+    max-height: 160px;
+    margin: 10px;
+    margin-top: 10px;
+}
+
+
+.categoryButton {
+    margin-right: 5px;
+}
+
+.jumbotron-filters {
+    overflow: auto;
+    height: 100%!important;
+    height: 100px;
+    padding: 30px;
+}

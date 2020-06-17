@@ -1,0 +1,39 @@
+form, h2, .existingAccount, .col-sm-6, .reg-message {
+    text-align: center!important;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.errorsDisplay {
+    margin-left: 30%;
+    font-size: 12px;
+    color: red;
+}
+
+form {
+    overflow: hidden;
+}
+
+button {
+    margin-bottom: 25px;
+}
+
+.input, mat-form-field {
+    width: 50%;
+    margin-left: 30%;
+    min-width: 200px;
+    margin-top: 30px;
+}
+
+.inputDivs {
+    margin-right: 25%;
+}
+
+.active {
+  border: 1px green solid
+}
+
+/* ng-reflect-is-disabled="true" - do a rule on this so it will hightlight the active ones */

@@ -1,0 +1,21 @@
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+.cart-item {
+    margin: auto;
+}
+
+.cartProductImage {
+    height: 30px;
+    width: 30px;
+}
+
+.highlighted { 
+    background: yellow;
+}
+
+.highlightedNone { 
+    background: transparent;
+}

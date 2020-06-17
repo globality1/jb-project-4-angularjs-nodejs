@@ -1,0 +1,15 @@
+{
+    "production": false,
+    "mysqlConfig": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "store"
+    },
+    "jwt": {
+        "secretKey": "M0nk3y1S0NF1re"
+    },
+    "hash": {
+        "secretKey": "T0B30rN0tT0B3"
+    }
+}

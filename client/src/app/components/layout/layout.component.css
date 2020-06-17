@@ -1,0 +1,12 @@
+div {
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    overflow: auto;
+}
+
+div, div > * { border: 1px solid black; }
+header, footer { grid-column: span 12;grid-row: span 1;}
+main { grid-column: span 12; height: 100%; grid-row: span 11; }
+
+

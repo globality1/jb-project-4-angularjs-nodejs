@@ -1,0 +1,10 @@
+<div class="container" name="itemInfoDiv">
+    <div class="row">
+        <div class="cart-item col-1"><img class="cartProductImage" [src]="'http://localhost:3000/api/images/products/'+productImageName" [alt]="productImageName"></div>
+        <!-- <div *ngIf="!highlight" class="cart-item col-4 highlightedNone">{{productName}}</div>
+        <div *ngIf="highlight" class="cart-item col-4 highlighted">{{productName}}</div> -->
+        <div class="cart-item col-4" [innerHTML]="productName | highlightValue: searchValue"></div>
+        <div class="cart-item col-3">{{productQuantity}}</div>
+        <div class="cart-item col-2">{{totalPrice | currency:'ILS'}} </div>
+    </div>
+</div>

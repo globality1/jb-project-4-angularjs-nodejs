@@ -1,0 +1,62 @@
+<h2> Add New Product</h2>
+
+
+<form #formInfo="ngForm">
+
+
+    <div>
+        <mat-form-field>
+            <mat-label>Product Name</mat-label>
+            <input type="text" matNativeControl [(ngModel)]="product.productName" name="productName" required
+                minlength="3" autofocus #productName="ngModel">
+            <mat-error *ngIf="productName.errors?.required && productName.touched">Missing Product Name</mat-error>
+            <mat-error *ngIf="!productName.valid">Minimum of 3 characters required for name</mat-error>
+        </mat-form-field>
+        <br />
+        <br />
+    </div>
+
+
+    <div>
+        <mat-form-field>
+            <mat-label>Product Price</mat-label>
+            <input type="number" matNativeControl [(ngModel)]="product.productPrice" name="productPrice" min="0"
+                max="10000" required #productPrice="ngModel">
+            <mat-error *ngIf="productPrice.errors?.required && productPrice.touched">Missing Product Price</mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="productPrice.valid && product.productPrice <= 0">Price must be above 0</mat-error>
+        <br />
+        <br />
+    </div>
+
+    <div>
+        <mat-form-field>
+            <mat-label>Select Category</mat-label>
+            <select matNativeControl [(ngModel)]="product.productCategoryId" name="productCategory"
+                #productCategory="ngModel" required>
+                <option *ngFor="let c of categories" [value]="c.categoryId">
+                    {{c.categoryName}}
+                </option>
+            </select>
+            <mat-error *ngIf="productCategory.errors?.required && !product.productCategoryId">Missing Product Category
+            </mat-error>
+        </mat-form-field>
+        <br />
+        <br />
+    </div>
+
+    <div>
+        <input type="file" accept="image/*" id="file" name="product-image" 
+            required (change)="handleFileInput($event.target.files)">
+        <div class="image-preview" *ngIf="previewImage">
+            <img [src]="previewImage" height="120" width="120" />
+        </div>
+        <br />
+        <br />
+    </div>
+
+    <button mat-raised-button color="primary" [disabled]="formInfo.form.invalid" (click)="addProduct()">Add</button>
+
+    <mat-error *ngIf="error">{{error}}</mat-error>
+
+</form>

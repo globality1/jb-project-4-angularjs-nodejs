@@ -1,0 +1,12 @@
+.left-side-home, 
+.middle-home, 
+.right-side-home { 
+    padding: 20px;
+    overflow: hidden;
+    min-width: 350px;
+}
+
+.homeDiv {
+max-width: 90%!important;
+margin-top: 50px;
+}

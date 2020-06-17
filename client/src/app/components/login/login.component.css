@@ -1,0 +1,20 @@
+.errorsDisplay {
+    color: red;
+    position: absolute;
+}
+
+
+.form-control {
+    width: 30%;
+    min-width: 190px;
+}
+
+.container {
+    width: 100%;
+    min-width: 350px;
+}
+
+.noAccount {
+    font-size: 18px;
+    font-weight: 500;
+}

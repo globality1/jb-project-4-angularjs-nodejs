@@ -1,0 +1,20 @@
+<div class="shopDiv row">
+    <div class="col-sm-12 col-md-4">
+        <div class="container-fluid">
+            <div class="jumbotron mainTitle">
+                <h1>Admin Panel</h1>
+                    <a routerLink="/admin/add" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        <button class="addProductButtonDiv" mat-raised-button color="primary">+</button>
+                    </a>
+            </div>
+            <div class="jumbotron">
+                <div>
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-8">
+        <app-products-admin></app-products-admin>
+    </div>
+</div>

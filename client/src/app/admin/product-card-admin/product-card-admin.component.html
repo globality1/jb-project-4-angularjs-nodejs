@@ -1,0 +1,11 @@
+<a routerLink="/admin/edit/{{productId}}">
+<div class="card" >
+    <div class="headerImage">
+        <img class="productImage" [src]="'http://localhost:3000/api/images/products/'+imageSource" [alt]="imageSource">
+    </div>
+    <h5 class="card-title">{{productName}}</h5>
+    <div class="card-text">
+        <div class="priceDiv">Price: {{productPrice | currency:'ILS'}}</div>
+    </div>
+</div>
+</a>

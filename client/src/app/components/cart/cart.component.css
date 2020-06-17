@@ -1,0 +1,52 @@
+.container-fluid {
+    height: 100%!important;
+    overflow: hidden;
+}
+
+.innerCartItemInformation  {
+    overflow: auto;
+    height: 350px;
+}
+
+.buyNow, .orderSection, .mainTitle {
+    text-align: center;
+}
+
+.cartItemInfo {
+    margin-top: 5px;
+}
+
+.cartItemsInformation {
+    border: 2px solid black;
+}
+
+.empty-cart {
+    float: right;
+    margin-top: -50px;
+}
+
+.orderSection {
+    margin-top: 20px;
+}
+
+.removeItemButton {
+    min-width: 25px!important;
+    line-height: 25px!important;
+    padding: 1px!important;
+}
+
+.removeButtonDiv {
+    margin-left: 55px;
+    margin-top: 5px;
+}
+
+.cartInfo {
+    height: 80%;
+}
+
+
+.searchProductsInOrder {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+}
