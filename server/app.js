@@ -71,15 +71,20 @@ server.use(express.static(__dirname));
 // actions the socket does when received on server
 socketServer.sockets.on("connection", socket => {
     
-    // action to be done and values to be returned back from the server
+    // action to be done upon update from admin
     socket.on("update-from-app", async message => {
+        const products = await productsLogic.getAllProductsAsync();
+        socketServer.sockets.emit("update-from-server", products)
+    })
+    // action to be done upon login from app
+    socket.on("login-from-app", async message => {
         const products = await productsLogic.getAllProductsAsync();
         socketServer.sockets.emit("update-from-server", products)
     })
 
     // output in server when client disconnects
     socket.on("disconnect", () => {
-        console.log("One Client has disconnected from the shop");
+        socket.disconnect();
     })
 
 })

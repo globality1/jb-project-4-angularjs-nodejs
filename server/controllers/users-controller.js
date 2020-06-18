@@ -24,7 +24,7 @@ router.get("/:uuid", async (request, response) => {
     }
 });
 
-// POST api/users
+// POST api/users - made some partial validations here
 router.post("/", async (request, response) => {
     // create user from request body
     const user = request.body;

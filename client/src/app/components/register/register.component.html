@@ -8,134 +8,99 @@
         </div>
         <h2 class="panel-title">Register</h2>
         <p class="reg-message">Please fill in the details bellow in order to register</p>
-        <form>
+        <form #registrationForm="ngForm" >
+
             <div class="row">
+
                 <div class="col-sm-6">
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>First Name</mat-label>
-                            <input type="text" matNativeControl [(ngModel)]="newUser.firstName" name="firstName"
-                                required minlength="2" autofocus #firstName="ngModel"
-                                [disabled]="buttonDisabled.firstName">
-                            <mat-error *ngIf="firstName.errors?.required && firstName.touched">Missing First Name
-                            </mat-error>
-                            <mat-error *ngIf="!firstName.valid">Minimum 2 letters</mat-error>
+                            <input type="text" matNativeControl [(ngModel)]="newUser.firstName" name="firstName" required minlength="2" maxlength="15" autofocus #firstName="ngModel" pattern="[a-zA-Z ]*">
+                            <mat-error *ngIf="firstName.errors?.required && firstName.touched">Missing First Name </mat-error>
+                            <mat-error *ngIf="!firstName.valid || firstName.errors?.minlength || firstName.errors?.maxlength || firstName.errors?.pattern || firstName.errors?.invalid">Minimum 2 letters and Maximum 15 English charcters</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="firstName.valid && errors.firstName">
-                            {{errors.firstName}}</mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Last Name</mat-label>
-                            <input type="text" matNativeControl [(ngModel)]="newUser.lastName" name="lastName" required
-                                minlength="2" #lastName="ngModel" [disabled]="buttonDisabled.lastName">
-                            <mat-error *ngIf="lastName.errors?.required && lastName.touched">Missing Last Name
-                            </mat-error>
-                            <mat-error *ngIf="!lastName.valid">Minimum 2 letters</mat-error>
+                            <input type="text" matNativeControl [(ngModel)]="newUser.lastName" name="lastName" required minlength="2"  maxlength="15" #lastName="ngModel" pattern="[a-zA-Z ]*">
+                            <mat-error *ngIf="lastName.errors?.required && lastName.touched">Missing Last Name </mat-error>
+                            <mat-error *ngIf="!lastName.valid || lastName.errors?.minlength || lastName.errors?.maxlength || lastName.errors?.pattern || lastName.errors?.invalid">Minimum 2 letters and Maximum 15 English charcters</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="lastName.valid && errors.lastName">{{errors.lastName}}
-                        </mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Email</mat-label>
-                            <input type="text" matNativeControl [(ngModel)]="newUser.email" name="email" required
-                             #email="ngModel" [disabled]="buttonDisabled.email">
+                            <input type="text" matNativeControl [(ngModel)]="newUser.email" name="email" required #email="ngModel" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$">
                             <mat-error *ngIf="email.errors?.required && email.touched">Missing Email</mat-error>
+                            <mat-error *ngIf="(email.errors?.pattern && email.touched) || email.errors?.invalid">Please use valid email format</mat-error>
+                            <mat-error *ngIf="email.errors?.exist">Email Already Exists</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="email.valid && errors.email">{{errors.email}}</mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Personal ID</mat-label>
-                            <input type="number" matNativeControl [(ngModel)]="newUser.personalId" name="personalId"
-                                required minlength="9" maxlength="9" autofocus #personalId="ngModel"
-                                [disabled]="buttonDisabled.personalId">
-                            <mat-error *ngIf="personalId.errors?.required && personalId.touched">Missing Personal Id
-                            </mat-error>
-                            <mat-error *ngIf="!personalId.valid">Must be 9 numbers long</mat-error>
+                            <input type="text" matNativeControl [(ngModel)]="newUser.personalId" name="personalId" required minlength="9" maxlength="9" autofocus #personalId="ngModel" pattern="^\d{9}$">
+                            <mat-error *ngIf="personalId.errors?.required && personalId.touched">Missing Personal Id</mat-error>
+                            <mat-error *ngIf="(personalId.errors?.pattern && personalId.touched) || personalId.errors?.invalid">Must be 9 numbers long</mat-error>
+                            <mat-error *ngIf="personalId.errors?.exist">Personal ID Already Exists</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="personalId.valid && errors.personalId">
-                            {{errors.personalId}}</mat-error>
                     </div>
 
-                    <button mat-raised-button color="primary" *ngIf="buttonDisabled.register" (click)="validateRegisterFormFirst()"
-                        [disabled]="(!firstName.valid || !lastName.valid || !email.valid || !personalId.valid)">
+                    <button mat-raised-button color="primary" *ngIf="!buttonsDisabled.first" (click)="validateRegisterFormFirst(registrationForm)" >
                         Continue
                     </button>
 
                 </div>
+
                 <div class="col-sm-6">
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Cities</mat-label>
-                            <select matNativeControl [(ngModel)]="newUser.city" name="city" required
-                                [disabled]="buttonDisabled.city">
-                                <option value="Tel Aviv">Tel-Aviv</option>
-                                <option value="Haifa">Haifa</option>
-                                <option value="Raanana">Ra'anana</option>
-                                <option value="Bat Yam">Bat Yam</option>
-                                <option value="Holon">Holon</option>
-                                <option value="Hertzelia">Hertzelia</option>
-                                <option value="Ashkelon">Ashkelon</option>
-                                <option value="Ashdod">Ashdod</option>
-                                <option value="Beer Sheva">Beer Sehva</option>
+                            <select matNativeControl [(ngModel)]="newUser.city" name="city" required disabled #city="ngModel">
+                                <option *ngFor='let c of cities' value={{c}}>{{c}}</option>
                             </select>
+                            <mat-error *ngIf="city.errors?.required || city.errors?.invalid">Please select a city</mat-error>
                         </mat-form-field>
-                        <div class="errorsDisplay" *ngIf="errors.city">{{errors.city}}</div>
                     </div>
-
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Address</mat-label>
-                            <input type="text" matNativeControl [(ngModel)]="newUser.address" name="address"
-                                required minlength="5" #address="ngModel" [disabled]="buttonDisabled.address">
+                            <input type="text" matNativeControl [(ngModel)]="newUser.address" name="address" required minlength="5" maxlength="40" #address="ngModel" disabled>
                             <mat-error *ngIf="address.errors?.required && address.touched">Missing Address</mat-error>
-                            <mat-error *ngIf="!address.valid">Must be 5 characters long</mat-error>
+                            <mat-error *ngIf="!address.valid || address.errors?.minlength || address.errors?.maxlength || address.errors?.pattern || address.errors?.invalid">Must be 5-40 characters long</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="address.valid && errors.address">{{errors.address}}
-                        </mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Password</mat-label>
-                            <input type="password" matNativeControl [(ngModel)]="newUser.password" name="password"
-                                required minlength="8" #password="ngModel"
-                                [disabled]="buttonDisabled.password">
-                            <mat-error *ngIf="password.errors?.required && address.touched">Missing Password</mat-error>
-                            <mat-error *ngIf="!password.valid">Must be 8 characters long</mat-error>
+                            <input type="password" matNativeControl [(ngModel)]="newUser.password" name="password" required minlength="8" #password="ngModel" disabled pattern="^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*\d)(?=\S*[^\w\s])\S{8,}$">
+                            <mat-error *ngIf="password.errors?.required && password.touched">Missing Password</mat-error>
+                            <mat-error *ngIf="!password.valid || password.errors?.pattern || password.errors?.invalid">Password Must be: Min 8 characters, 1 Upper case, 1 Lower case, 1 Number and special symbol</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="password.valid && errors.password">{{errors.password}}
-                        </mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Confirm Password</mat-label>
-                            <input type="password" matNativeControl [(ngModel)]="newUser.confirmPassword" name="confirmPassowrd"
-                                required minlength="8" #confirmPassword="ngModel"
-                                [disabled]="buttonDisabled.confirmPassword">
-                            <mat-error *ngIf="confirmPassword.errors?.required && address.touched">Missing Password
-                                Confirmation</mat-error>
-                            <mat-error *ngIf="!confirmPassword.valid">Must be 8 characters long</mat-error>
+                            <input type="password" matNativeControl [(ngModel)]="newUser.confirmPassword" name="confirmPassword" required minlength="8" #confirmPassword="ngModel" disabled>
+                            <mat-error *ngIf="confirmPassword.errors?.required && confirmPassword.touched">Missing Password Confirmation</mat-error>
+                            <mat-error *ngIf="(confirmPassword !== password && confirmPassword.touched) || confirmPassword.errors?.invalid">Passwords don't match</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="confirmPassword.valid && errors.confirmPassword">
-                            {{errors.confirmPassword}}</mat-error>
                     </div>
 
-
-                    <button mat-raised-button color="primary" *ngIf="!buttonDisabled.register" (click)="validateRegisterForm()"
-                        [disabled]="buttonDisabled.register">
+                    <button mat-raised-button color="primary" *ngIf="!buttonsDisabled.second" (click)="validateRegisterForm(registrationForm)">
                         Register
                     </button>
-                    <div class="errorsDisplay" *ngIf="errors.register.length>0">{{errors.register}}</div>
+                    <div class="errorsDisplay" *ngIf="registerError">{{registerError}}</div>
 
                 </div>
             </div>

@@ -10,6 +10,7 @@ export class RegisterService {
 
     constructor(private http: HttpClient) { }
 
+    // register new user
     public registerNewUser(user): Promise<NewUserModel[]> {
         return this.http.post<NewUserModel[]>("http://localhost:3000/api/users", user).toPromise();
     }

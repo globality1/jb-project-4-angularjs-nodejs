@@ -9,10 +9,10 @@ export class SystemInformationComponent {
 
   constructor() { }
 
-  @Input() 
+  @Input()
   public productsCount?: number;
 
-  @Input() 
+  @Input()
   public ordersCount?: number;
 
 }

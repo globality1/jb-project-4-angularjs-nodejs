@@ -12,20 +12,25 @@ export class ProductsService {
 
     constructor(private http: HttpClient) { }
 
+    // gets all products from data source
     public async getAllProductsAsync(): Promise<ProductModel[]> {
         const headers = {
             authorization: "Bearer " + store.getState().token
         }
-        return this.http.get<ProductModel[]>("http://localhost:3000/api/products", { headers: headers } ).toPromise();
+        const products = this.http.get<ProductModel[]>("http://localhost:3000/api/products", { headers: headers } ).toPromise();
+        
+        return products;
     }
-    
+
+    // get one specific product from data source
     public async getOneProductAsync(id: number): Promise<ProductModel> {
         const headers = {
             authorization: "Bearer " + store.getState().token
         }
         return this.http.get<ProductModel>("http://localhost:3000/api/products/" + id, { headers: headers } ).toPromise();
     }
-
+    
+    // adding new product by populating FormData from
     public async addProductAsync(product: ProductModel): Promise<ProductModel> {
         let productForm: FormData  = new FormData();
         productForm.append('productName', product.productName);
@@ -39,6 +44,7 @@ export class ProductsService {
             ).toPromise();
     }
 
+    // updating new product by populating FormData from
     public async updateProductAsync(product: ProductModel): Promise<ProductModel> {
         let productForm: FormData  = new FormData();
         productForm.append('productId', product.id.toString());
@@ -55,17 +61,18 @@ export class ProductsService {
             ).toPromise();
     }
 
-    public getStoreUpdateAdmin(): boolean {
+    // activates socket to pull products information live
+    public activateSocket(): boolean {
         // send socket to server client have connected
-        store.getState().socket.connect()
         store.getState().socket.emit("update-from-app", 'Success');
         // get response back from server with all products info as first without making additional call to the server,
         // and make products be based on socket if any update / new product event occurs - same for everyone
         store.getState().socket.on("update-from-server", (products: ProductModel[]) => {
-            // if products returned, 
+            // if products returned
             if (products) {
                 store.dispatch({ type: ActionType.GetProducts, payload: { products } })
             }
+            return products
         });
         return true;
     }

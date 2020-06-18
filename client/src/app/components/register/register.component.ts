@@ -3,9 +3,10 @@ import { NewUserModel } from 'src/app/models/new-user-model';
 import { Router } from '@angular/router';
 import { RegisterService } from 'src/app/services/register.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { FieldValidationService } from 'src/app/services/fieldValidations.service';
-import { userShoppingCartService } from 'src/app/services/userShoppingCart.service';
+import { FieldValidationService } from 'src/app/services/field-validations';
+import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { store } from 'src/app/redux/store';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -14,127 +15,113 @@ import { store } from 'src/app/redux/store';
 })
 export class RegisterComponent implements OnInit {
 
-  public buttonDisabled = {
-    firstName: false,
-    lastName: false,
-    personalId: false,
-    email: false,
-    continue: false,
-    address: true,
-    password: true,
-    confirmPassword: true,
-    city: true,
-    register: true
+  public buttonsDisabled = {
+    first: false,
+    second: true
   }
 
-  public newUser = new NewUserModel();
+  public registerError: string;
 
-  public errors = {
-    firstName: "",
-    lastName: "",
-    personalId: "",
-    city: "",
-    address: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    register: ""
-  };
+  public newUser: NewUserModel;
 
+  public cities = ["Tel Aviv", "Haifa", "Raanana", "Bat Yam", "Holon", "Hertzelia", "Ashkelon", "Ashdod", "Beer Sheva"];
 
-  constructor(private myRegisterService: RegisterService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService, private myShoppingCart: userShoppingCartService) { }
+  constructor(private myRegisterService: RegisterService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService) { }
 
   ngOnInit(): void {
-    if(store.getState().isLoggedIn) {
+    if (store.getState().isLoggedIn) {
       this.myRouter.navigateByUrl("/shop");
-      }
+    }
+    this.newUser = new NewUserModel();
   }
-  
-  public validateRegisterFormFirst(): boolean {
+
+  // inner validation
+  public validateRegisterFormFirst(registrationForm: NgForm): boolean {
 
     // first name validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.firstName).success || !this.myFieldValidationsService.checkIfFieldInZone(this.newUser.firstName).success) {
-      this.errors.firstName = "First Name Can't be Empty and 2-15 Characters long only English Characters";
+      registrationForm.controls['firstName'].setErrors({ 'invalid': true });
       return false;
     }
-    this.errors.firstName = "";
+    registrationForm.controls['firstName'].setErrors({ 'invalid': false });
+    registrationForm.controls['firstName'].disable();
 
     // last name validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.lastName).success || !this.myFieldValidationsService.checkIfFieldInZone(this.newUser.lastName).success) {
-      this.errors.lastName = "Last Name Can't be Empty and 2-15 Characters long only English Characters";
+      registrationForm.controls['lastName'].setErrors({ 'invalid': true });
       return false;
     }
-    this.errors.lastName = "";
+    registrationForm.controls['lastName'].setErrors({ 'invalid': false });
+    registrationForm.controls['lastName'].disable();
 
     // email validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.email).success || !this.myFieldValidationsService.checkIfEmailFormat(this.newUser.email).success) {
-      this.errors.email = "Email must be in valid email format";
+      registrationForm.controls['email'].setErrors({ 'invalid': true });
       return false;
     }
-    this.errors.email = "";
+    registrationForm.controls['email'].setErrors({ 'invalid': false });
+    registrationForm.controls['email'].disable();
 
     // personalId validations
-    if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.personalId).success || !this.myFieldValidationsService.checkIfPersonalIdNotFake(this.newUser.personalId).success) {
-      this.errors.personalId = "Personal ID Must be 9 digits long";
+    if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.personalId).success || !this.myFieldValidationsService.checkIfPersonalIdNotFake(+this.newUser.personalId).success) {
+      registrationForm.controls['personalId'].setErrors({ 'invalid': true });
       return false;
     }
-    this.errors.personalId = "";
+    registrationForm.controls['personalId'].setErrors({ 'invalid': false });
+    registrationForm.controls['personalId'].disable();
+    this.buttonsDisabled.first = true;
+    this.buttonsDisabled.second = false;
+    registrationForm.controls['city'].enable();
+    registrationForm.controls['address'].enable();
+    registrationForm.controls['password'].enable();
+    registrationForm.controls['confirmPassword'].enable();
 
-    this.buttonDisabled = {
-      firstName: true,
-      lastName: true,
-      personalId: true,
-      email: true,
-      continue: true,
-      address: false,
-      password: false,
-      confirmPassword: false,
-      city: false,
-      register: false
-    }
     return true;
   }
 
-
-  public validateRegisterForm() {
+  public validateRegisterForm(registrationForm: NgForm) {
     // doing previous field validation in case someone decides to be smart ass and enable fields and change them
-    if (this.validateRegisterFormFirst()) {
-
+    this.registerError = '';
+    if (this.validateRegisterFormFirst(registrationForm)) {
       // city validations
       if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.city).success || !this.myFieldValidationsService.checkIfFieldInZone(this.newUser.city).success) {
-        this.errors.city = "First Name Can't be Empty and 2-15 Characters long only English Characters";
+        registrationForm.controls['city'].setErrors({ 'invalid': true });
         return false;
       }
-      this.errors.city = "";
+      registrationForm.controls['city'].setErrors({ 'invalid': false });
+      registrationForm.controls['city'].disable();
 
       // address validations
       if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.address).success || !this.newUser.address || this.newUser.address.length < 5 || this.newUser.address.length > 40) {
-        this.errors.address = "Address Must be 5-40 characters long";
+        registrationForm.controls['address'].setErrors({ 'invalid': true });
         return;
       }
-      this.errors.address = "";
+      registrationForm.controls['address'].setErrors({ 'invalid': false });
+      registrationForm.controls['address'].disable();
 
       // password validations
       if (!this.myFieldValidationsService.checkIfEmpty(this.newUser.password).success || !this.myFieldValidationsService.checkIfPasswordValid(this.newUser.password).success) {
-        this.errors.password = "Password Must be 8-20 Characters 1 upper case, 1 lower case and 1 special Character";
+        registrationForm.controls['password'].setErrors({ 'invalid': true });
         return;
       }
-      this.errors.password = "";
+      registrationForm.controls['password'].setErrors({ 'invalid': false });
+      registrationForm.controls['password'].disable();
 
       // check if password same as original or empty
       if (this.newUser.password !== this.newUser.confirmPassword) {
-        this.errors.confirmPassword = "Passwords Don't Match";
+        registrationForm.controls['confirmPassword'].setErrors({ 'invalid': true });
         return;
       }
-      this.errors.confirmPassword = "";
+      registrationForm.controls['confirmPassword'].setErrors({ 'invalid': false });
+      registrationForm.controls['confirmPassword'].disable();
 
       // if all valid create new user
-      this.registerNewUser();
+      this.registerNewUser(registrationForm);
     }
   }
 
   // register function
-  private async registerNewUser() {
+  private async registerNewUser(registrationForm: NgForm) {
     try {
       const auth = await this.myRegisterService.registerNewUser(this.newUser);
       if (auth) {
@@ -148,10 +135,21 @@ export class RegisterComponent implements OnInit {
       // custom redirect to shop
     }
     catch (err) {
-      this.errors.register = err.error;
+      if(err.error.personalId) {
+        registrationForm.controls["personalId"].enable();
+        registrationForm.controls["personalId"].setErrors({ 'exist': true})
+        return;
+      }
+      registrationForm.controls["personalId"].setErrors({ 'exist': false})
+      if(err.error.email) {
+        registrationForm.controls["email"].enable();
+        registrationForm.controls["email"].setErrors({ 'exist': true})
+        return;
+      }
+      registrationForm.controls["email"].setErrors({ 'exist': false})
     }
   }
-  
+
 
   // login new registered user
   private async loginNewUser(credentials) {
@@ -161,20 +159,14 @@ export class RegisterComponent implements OnInit {
       // if user returned, store all data
       if (response) {
         // this.myAuthService.storeUserInfo(user);
-        const shoppingCart = await this.myShoppingCart.checkCartExisting();
-        // if cart exist, move to shop area
-        if (shoppingCart) {
-          const shoppingCartItems = await this.myShoppingCart.getUserShoppingCartItems();
-          if(shoppingCartItems) {
-          setTimeout(()=>{this.myRouter.navigateByUrl("/shop")}, 1000);
-          }
+          setTimeout(() => { this.myRouter.navigateByUrl("/shop") }, 1000);
+          this.newUser = new NewUserModel();
+          return;
         }
-      } else {
-        setTimeout(()=>{this.myRouter.navigateByUrl("/shop")}, 1000);
-      }
+      this.myRouter.navigateByUrl("/home");
     }
     catch (err) {
-      this.errors.register = err.error;
+      this.registerError = "Contact Admin for more information"
     }
   }
 

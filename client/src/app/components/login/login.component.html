@@ -1,31 +1,24 @@
 <div class="container">
     <div class="jumbotron">
         <h2>Login</h2>
-        <!-- ngform module based on angular materials -->
-        <form #formInfo="ngForm">
 
+        <form #loginForm="ngForm">
             
             <mat-form-field>
-                <input matInput type="text" placeholder="Email..." name="email" [(ngModel)]="credentials.email" required
-                    autofocus #emailLogin="ngModel">
-                <mat-error *ngIf="emailLogin.errors?.required && emailLogin.touched">Missing Email</mat-error>
-                <mat-error *ngIf="errors.email">{{errors.email}}</mat-error>
+                <input matInput type="text" placeholder="Email..." name="email" [(ngModel)]="credentials.email" required autofocus #email="ngModel" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$">
+                <mat-error *ngIf="email.errors?.required && email.touched">Missing Email</mat-error>
+                <mat-error *ngIf="email.errors?.incorrect || email.errors?.pattern">Email must be in valid format, Please do not attempt hacking</mat-error>
             </mat-form-field>
             <br><br>
 
             <mat-form-field>
-                <input matInput type="password" placeholder="Password..." name="password"
-                    [(ngModel)]="credentials.password" required #passwordLogin="ngModel" autofocus>
-                <mat-error *ngIf="passwordLogin.errors?.required && passwordLogin.touched">Missing Password</mat-error>
-                <mat-error *ngIf="errors.password">{{errors.password}}</mat-error>
+                <input matInput type="password" placeholder="Password..." name="password" [(ngModel)]="credentials.password" required #password="ngModel">
+                <mat-error *ngIf="(password.errors?.required && password.touched) || password.errors?.incorrect" >Missing Password</mat-error>
             </mat-form-field>
             <br><br>
-
-
-
-            <button mat-raised-button color="primary" [disabled]="formInfo.form.invalid"
-                (click)="validateForm()">Login</button>
-            <div class="errorsDisplay" *ngIf="errors.login">{{errors.login}}</div>
+        
+            <button mat-raised-button color="primary" (click)="validateForm(loginForm)" name="loginButton">Login</button>
+            <mat-error *ngIf="loginError">{{loginError}}</mat-error>
 
             <br />
             <br />

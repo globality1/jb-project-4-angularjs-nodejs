@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { store } from 'src/app/redux/store';
-import { UserShoppingCartItemsService } from 'src/app/services/userShoppingCartItems.service';
+import { UserShoppingCartItemsService } from 'src/app/services/user-shopping-cart-items';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
 import { ActionType } from 'src/app/redux/actionType';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,33 +11,33 @@ import { Router } from '@angular/router';
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css']
 })
-export class ProductCardComponent implements OnInit{
+export class ProductCardComponent implements OnInit {
 
   public newCartItem = new ShoppingCartItemModel;
   public isAdmin: number;
-  
-  public constructor(private myShoppingCartActions: UserShoppingCartItemsService, private myAuthService: AuthService, private myRouter: Router) {};
+
+  public constructor(private myShoppingCartActions: UserShoppingCartItemsService, private myAuthService: AuthService, private myRouter: Router) { };
   @Input()
   public productId: number;
 
-  @Input() 
+  @Input()
   public imageSource: string;
 
-  @Input() 
+  @Input()
   public productName: string;
 
-  @Input() 
+  @Input()
   public productPrice: number;
 
   ngOnInit() {
-   this.isAdmin = store.getState().isAdmin;
-   this.newCartItem.quantity = 0;
+    this.isAdmin = store.getState().isAdmin;
+    this.newCartItem.quantity = 0;
   }
 
   public async addProductToCart() {
     try {
       // check and confirm that quantity is above 0 to not add negative price
-      if(this.newCartItem.quantity <= 0) {
+      if (this.newCartItem.quantity <= 0) {
         this.newCartItem.quantity = 0;
         return;
       }
@@ -56,11 +56,10 @@ export class ProductCardComponent implements OnInit{
       // logs out client if jwt token has timed out
       if (err.status === 401) {
         const response = await this.myAuthService.logout();
+        // if logout successful, log redirect to home
         if (response) {
-          setTimeout(() => this.myRouter.navigateByUrl("/home"), 200);
-          // store dispatch
-          store.getState().socket.disconnect();
-          store.dispatch({ type: ActionType.Logout });
+          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          return
         }
       }
     }

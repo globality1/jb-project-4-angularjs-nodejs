@@ -2,16 +2,15 @@
 
 <div *ngIf="error">{{error}}</div>
 
-<form #formInfo="ngForm">
+<form #editProductForm="ngForm">
 
 
     <div>
         <mat-form-field>
             <mat-label>Product Name</mat-label>
-            <input type="text" matNativeControl [(ngModel)]="product.productName" name="productName" required
-                minlength="3" #productName="ngModel">
+            <input type="text" matNativeControl [(ngModel)]="product.productName" name="productName" required minlength="3" maxlength="40" #productName="ngModel" pattern="[a-zA-Z ]*">
             <mat-error *ngIf="productName.errors?.required && productName.touched">Missing Product Name</mat-error>
-            <mat-error *ngIf="!productName.valid">Minimum of 3 characters required for name</mat-error>
+            <mat-error *ngIf="productName.errors?.pattern || productName.errors?.minlength || productName.errors?.maxlength || productName.errors?.invalid">Name Should be 3-40 English Characters</mat-error>
         </mat-form-field>
         <br />
         <br />
@@ -21,11 +20,10 @@
     <div>
         <mat-form-field>
             <mat-label>Product Price</mat-label>
-            <input type="number" matNativeControl [(ngModel)]="product.productPrice" name="productPrice" min="0"
-                max="10000" required #productPrice="ngModel">
+            <input type="number" matNativeControl [(ngModel)]="product.productPrice" name="productPrice" min="0" max="10000" required #productPrice="ngModel">
             <mat-error *ngIf="productPrice.errors?.required && productPrice.touched">Missing Product Price</mat-error>
+            <mat-error *ngIf="+productPrice.value < 0 || +productPrice.value > 10000 || productName.errors?.invalid">Price must be above 0 and bellow 10000</mat-error>
         </mat-form-field>
-        <mat-error *ngIf="productPrice.valid && product.productPrice <= 0">Price must be above 0</mat-error>
         <br />
         <br />
     </div>
@@ -33,30 +31,24 @@
     <div>
         <mat-form-field>
             <mat-label>Select Category</mat-label>
-            <select matNativeControl [(ngModel)]="product.productCategoryId" name="productCategory"
-                #productCategory="ngModel" required>
-                <option *ngFor="let c of categories" [value]="c.categoryId">
-                    {{c.categoryName}}
-                </option>
+            <select matNativeControl [(ngModel)]="product.productCategoryId" name="productCategory" #productCategory="ngModel" required>
+                <option *ngFor="let c of categories" [value]="c.categoryId"> {{c.categoryName}} </option>
             </select>
-            <mat-error *ngIf="productCategory.errors?.required && !product.productCategoryId">Missing Product Category
-            </mat-error>
+            <mat-error *ngIf="productCategory.errors?.required && productCategory.touched">Missing Product Category </mat-error>
+            <mat-error *ngIf="productCategory.errors?.invalid">Please select real category </mat-error>
         </mat-form-field>
         <br />
         <br />
     </div>
 
     <div>
-        <input type="file" accept="image/*" id="file" name="product-image" 
-            (change)="handleFileInput($event.target.files)">
-            <img *ngIf="previewImage" [src]="previewImage" height="100" width="100" />
-        <img *ngIf="!previewImage && product.productImageName" 
-            [src]="'http://localhost:3000/api/images/products/' + product.productImageName" height="120">
+        <input type="file" accept="image/*" id="file" name="product-image" (change)="handleFileInput($event.target.files)">
+        <img *ngIf="previewImage" [src]="previewImage" height="100" width="100" />
+        <img *ngIf="!previewImage && product.productImageName" [src]="'http://localhost:3000/api/images/products/' + product.productImageName" height="120">
         <br />
         <br />
     </div>
 
-    <button mat-raised-button color="primary" [disabled]="formInfo.form.invalid" (click)="editProduct()">Save
-        Changes</button>
+    <button mat-raised-button color="primary" (click)="editProduct(editProductForm)">Save Changes</button>
 
 </form>

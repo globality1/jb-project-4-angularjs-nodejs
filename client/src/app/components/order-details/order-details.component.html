@@ -3,7 +3,7 @@
         <h1>Delivery And Payment Details</h1>
     </div>
     <div class="jumbotron paymentDisplay">
-        <form>
+        <form #orderForm="ngForm">
             <div class="row">
                 <div class="col-sm-12 detailsDiv">
                     <hr>
@@ -13,7 +13,7 @@
                         <div class="col-sm-4">
                     <h2>Shipping Details</h2>
                 </div>
-                    <div class="detailsFillInButton col-sm-1"><button mat-raised-button color="primary" (click)="fillInAddressDetails()">
+                    <div class="detailsFillInButton col-sm-1"><button mat-raised-button color="primary" (click)="fillInAddressDetails(orderForm)">
                         Use Account Address
                     </button>
                 </div>
@@ -21,45 +21,31 @@
                     <hr>
                     <div class="inputDivs">
                         <mat-form-field>
-                            <mat-label>City to Deliver</mat-label>
-                            <select matNativeControl [(ngModel)]="newOrder.city" name="city" required autofocus>
-                                <option value="Tel Aviv">Tel-Aviv</option>
-                                <option value="Haifa">Haifa</option>
-                                <option value="Raanana">Ra'anana</option>
-                                <option value="Bat Yam">Bat Yam</option>
-                                <option value="Holon">Holon</option>
-                                <option value="Hertzelia">Hertzelia</option>
-                                <option value="Ashkelon">Ashkelon</option>
-                                <option value="Ashdod">Ashdod</option>
-                                <option value="Beer Sheva">Beer Sehva</option>
+                            <mat-label>Delivery City</mat-label>
+                            <select matNativeControl [(ngModel)]="newOrder.city" name="city" required #city="ngModel">
+                                <option *ngFor='let c of cities' value={{c}}>{{c}}</option>
                             </select>
+                            <mat-error *ngIf="city.errors?.required || city.errors?.invalid">Please select a city</mat-error>
                         </mat-form-field>
-                        <div class="errorsDisplay" *ngIf="errors.city">{{errors.city}}</div>
                     </div>
-
 
                     <div class="inputDivs">
                         <mat-form-field>
-                            <mat-label>Address to Deliver</mat-label>
-                            <input type="text" matInput [(ngModel)]="newOrder.address" name="address"
-                                required autofocus #address="ngModel">
+                            <mat-label>Delivery Address</mat-label>
+                            <input type="text" matNativeControl [(ngModel)]="newOrder.address" name="address" required minlength="5" maxlength="40" #address="ngModel">
                             <mat-error *ngIf="address.errors?.required && address.touched">Missing Address</mat-error>
-                            <mat-error *ngIf="!address.valid">Must be 5 characters long</mat-error>
+                            <mat-error *ngIf="address.errors?.minlength || address.errors?.maxlength || address.errors?.pattern || address.errors?.invalid">Must be 5-40 characters long</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="address.valid && errors.address">{{errors.address}}
-                        </mat-error>
                     </div>
 
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Date of Delivery</mat-label>
-                            <input type="date" matNativeControl [(ngModel)]="newOrder.deliveryDate" name="dateOfOrder"
-                                required  min="{{todayDate | date:'yyyy-MM-dd'}}" autofocus #dateOfOrder="ngModel">
+                            <input type="date" matNativeControl [(ngModel)]="newOrder.deliveryDate" name="dateOfOrder" required  min="{{todayDate | date:'yyyy-MM-dd'}}" #dateOfOrder="ngModel">
                             <mat-error *ngIf="dateOfOrder.errors?.required && dateOfOrder.touched">Missing Delivery Date</mat-error>
-                            <mat-error *ngIf="!dateOfOrder.valid">Please use correct date format</mat-error>
+                            <mat-error *ngIf="dateOfOrder.errors?.invalid">Please select date bigger than today</mat-error>
+                            <mat-error *ngIf="dateOfOrder.errors?.taken">Date is Taken - Please choose a different date</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="dateOfOrder.valid && errors.orderDate">{{errors.orderDate}}
-                        </mat-error>
                     </div>
                     
                     
@@ -69,23 +55,19 @@
                     <div class="inputDivs">
                         <mat-form-field>
                             <mat-label>Credit Card Number</mat-label>
-                            <input type="text" matNativeControl [(ngModel)]="creditCardValue" name="creditCard"
-                                required minlength="16" maxlength="16" autofocus #creditCard="ngModel">
+                            <input type="text" matNativeControl [(ngModel)]="creditCardValue" name="creditCard" required minlength="16" maxlength="16" #creditCard="ngModel">
                             <mat-error *ngIf="creditCard.errors?.required && creditCard.touched">Missing Credit Card</mat-error>
-                            <mat-error *ngIf="!creditCard.valid">Invalid Credit Card number</mat-error>
+                            <mat-error *ngIf="!creditCard.valid || creditCard.errors?.invalid">Invalid Credit Card number</mat-error>
                         </mat-form-field>
-                        <mat-error class="errorsDisplay" *ngIf="creditCard.valid && errors.creditCard">
-                            {{errors.creditCard}}</mat-error>
                     </div>
 
                     <br>
-                    <button mat-raised-button color="primary" (click)="validateOrderForm()">
+                    <button mat-raised-button color="primary" (click)="validateOrderForm(orderForm)">
                         Schedule Delivery
                     </button>
                     <br/>
                     <br/>
                     <div class="errorsDisplay" *ngIf="errors.order.length>0">{{errors.order}}</div>
-
                 </div>
             </div>
         </form>

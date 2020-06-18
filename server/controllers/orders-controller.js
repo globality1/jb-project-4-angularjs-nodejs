@@ -31,7 +31,7 @@ router.post("/new", jwtVerifier.verifyToken, (request, response) => {
                 }
                 // return and exit delivery date < now
                 if (!order.creationDate || !order.deliveryDate) {
-                    response.status(500).send("Data can't be Empty or Bellow 0");
+                    response.status(500).send("Dates can't be empty");
                     return;
                 }
                 order.deliveryDate = new Date(order.deliveryDate)

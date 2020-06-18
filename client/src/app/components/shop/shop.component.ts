@@ -14,10 +14,10 @@ export class ShopComponent implements OnInit {
 
   ngOnInit(): void {
     // check if user logged in, if no move him to login page
-    if(!store.getState().isLoggedIn) {
-    this.myRouter.navigateByUrl("/home");
+    if (!store.getState().isLoggedIn) {
+      this.myRouter.navigateByUrl("/home");
     }
-    if(store.getState().isAdmin) {
+    if (store.getState().isAdmin) {
       this.myRouter.navigateByUrl("/admin");
     }
     // remove orderItems from state so it will reset it self

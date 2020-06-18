@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { of } from 'rxjs';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
 import { store } from 'src/app/redux/store';
 import { Router } from '@angular/router';

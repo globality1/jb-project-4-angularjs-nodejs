@@ -5,7 +5,8 @@ const router = express.Router();
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-const jwtVerifier = require("../middleware/jwt-verify")
+const jwtVerifier = require("../middleware/jwt-verify");
+const fieldValidator = require("../helpers/field-validator");
 
 // GET api/products/
 router.get("/", jwtVerifier.verifyToken, (request, response) => {
@@ -83,6 +84,15 @@ router.post("/", jwtVerifier.verifyToken, (request, response) => {
                 if (!product.productName || !product.productPrice || +product.productPrice < 0) {
                     response.status(500).send("Data can't be Empty or Bellow 0");
                 }
+                if (!fieldValidator.validateProductName(product.productName)) {
+                    response.status(500).send("Name should be 3-40 characters long");
+                }
+                if (!fieldValidator.validateProductPrice(product.productPrice)) {
+                    response.status(500).send("Price should be between 0 - 10000");
+                }
+                if (!request.files.productImage) {
+                    response.status(500).send("Missing File");
+                }
                 // create separate file object
                 const uploadFile = request.files.productImage;
                 // get file extension
@@ -120,21 +130,23 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
             try {
                 // get product from request body
                 const product = request.body;
-                // return and exist if request is empty
-                if (!product.productName || !product.productPrice || +product.productPrice < 0) {
-                    response.status(500).send("Data can't be Empty or Bellow 0");
-                    return;
+                if (product.productName && !fieldValidator.validateProductName(product.productName)) {
+                    response.status(500).send("Name should be 3-40 characters long");
                 }
+                if (product.productPrice && !fieldValidator.validateProductPrice(product.productPrice)) {
+                    response.status(500).send("Price should be between 0 - 10000");
+                }
+                // const filename in case none is being passed to pass empty string
                 const fileName = ''
                 if (request.files) {
-                // create separate file object
-                const uploadFile = request.files.productImage;
-                // get file extension
-                const extension = uploadFile.name.substr(uploadFile.name.lastIndexOf("."));
-                // generate new name for file with correct extension
-                fileName = uuid.v4() + extension;
-                // push file into upload folder under new name
-                uploadFile.mv("./uploads/products/" + fileName);
+                    // create separate file object
+                    const uploadFile = request.files.productImage;
+                    // get file extension
+                    const extension = uploadFile.name.substr(uploadFile.name.lastIndexOf("."));
+                    // generate new name for file with correct extension
+                    fileName = uuid.v4() + extension;
+                    // push file into upload folder under new name
+                    uploadFile.mv("./uploads/products/" + fileName);
                 }
                 // send product with new file name to be added in the data source
                 const updatedProduct = await productsLogic.updatePartialProductAsync(product, fileName);

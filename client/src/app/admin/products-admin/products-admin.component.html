@@ -6,7 +6,7 @@
         <br/>
         <div>
             <div class="row categoriesFilter">
-                <button class="categoryButton" mat-stroked-button color="primary" (click)="filterProductsByCategory()">All</button>
+                <button class="categoryButton" mat-stroked-button color="primary" (click)="filterProductsByCategory(0)">All</button>
                 <div *ngFor="let c of shopCategories">
                     <button class="categoryButton" mat-stroked-button color="primary" (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
                 </div>
@@ -17,9 +17,9 @@
 
 <div class="container-fluid-products container-fluid">
     <div class="jumbotron-products jumbotron">
-        <div *ngIf="!products.length">No Products Found</div>
-        <div *ngIf="products">
-            <div *ngFor="let p of products">
+        <div *ngIf="!productsDisplay">No Products Found</div>
+        <div *ngIf="productsDisplay">
+            <div *ngFor="let p of productsDisplay">
                 <app-product-card-admin [id]="'cardOfProductId' + p.id" productId={{p.id}} imageSource={{p.productImageName}}
                     productName={{p.productName}} productPrice={{p.productPrice}}>
                 </app-product-card-admin>

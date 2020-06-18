@@ -49,8 +49,11 @@
         <div class="orderSection">
             <div>Total : {{cartTotalAmount || 0 | currency:'ILS'}}</div>
             <br>
-            <button *ngIf="cartProducts.length && allowEdit" class="btn btn-success" (click)="moveToCheckOut()">Order
-                Now</button>
-            <button *ngIf="!allowEdit" class="btn btn-success" (click)="moveBackToShop()">Return To Shop</button>
+            <a *ngIf="cartProducts.length && allowEdit" routerLink="/shop/check-out">
+                <button  class="btn btn-success">Order Now</button>
+            </a>
+            <a *ngIf="!allowEdit" routerLink="/shop/check-out">
+                <button  class="btn btn-success">Return To Shop</button>
+            </a>
         </div>
     </div>

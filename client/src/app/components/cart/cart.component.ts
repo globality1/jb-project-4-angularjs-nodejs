@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { store } from 'src/app/redux/store';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
-import { userShoppingCartService } from 'src/app/services/userShoppingCart.service';
+import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { ActionType } from 'src/app/redux/actionType';
-import { UserShoppingCartItemsService } from 'src/app/services/userShoppingCartItems.service';
+import { UserShoppingCartItemsService } from 'src/app/services/user-shopping-cart-items';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -32,21 +32,25 @@ export class CartComponent implements OnInit {
       this.cartProducts = store.getState().cartItems;
     })
     this.cartTotalAmount = store.getState().cartTotalPrice;
-    if (store.getState().cartItems) {
-      this.cartProducts = store.getState().cartItems;
-    }
-    else {
-      this.cartProducts = await this.myCartService.getUserShoppingCartItems();
-      store.dispatch({ type: ActionType.SetCartItems, payload: { cartItems: this.cartProducts } });
-    }
+    this.cartProducts = store.getState().cartItems;
   }
 
+  // clean whole cart from it's products
   public async cleanCart() {
     try {
       const cleanCart = await this.myCartItemsService.removeAllItemsFromCart(store.getState().cart.id)
     }
     catch (err) {
       this.error = err;
+      // logs out client if jwt token has timed out
+      if (err.status === 401) {
+        const response = await this.myAuthService.logout();
+        // if logout successful, log redirect to home
+        if (response) {
+          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          return
+        }
+      }
     }
   }
 
@@ -56,23 +60,17 @@ export class CartComponent implements OnInit {
       const response = await this.myCartItemsService.removeItemFromCart(id);
     }
     catch (err) {
-      const response = await this.myAuthService.logout();
-      if (response) {
-        setTimeout(() => this.myRouter.navigateByUrl("/home"), 200);
-        // store dispatch
-        store.getState().socket.disconnect();
-        store.dispatch({ type: ActionType.Logout });
+      // logs out client if jwt token has timed out
+      if (err.status === 401) {
+        const response = await this.myAuthService.logout();
+        // if logout successful, log redirect to home
+        if (response) {
+          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          return
+        }
       }
       this.error = "Please try again later";
     }
-  }
-
-  public moveToCheckOut() {
-    this.myRouter.navigateByUrl("/shop/check-out")
-  }
-
-  public moveBackToShop() {
-    this.myRouter.navigateByUrl("/shop")
   }
 
   public highlightSearch(e) {

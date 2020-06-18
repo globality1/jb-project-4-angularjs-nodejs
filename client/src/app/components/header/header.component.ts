@@ -20,14 +20,15 @@ export class HeaderComponent implements OnInit {
     // set first default values
     this.name = "Guest";
     // subscribe to store
-    store.subscribe(() =>{
-      this.name = store.getState().user.firstName;
-      this.isLoggedIn = store.getState().isLoggedIn;
+    store.subscribe(() => {
+      if (store.getState().user) {
+        this.name = store.getState().user.firstName;
+        this.isLoggedIn = store.getState().isLoggedIn;
+      }
     })
     if (store.getState().isLoggedIn) {
       this.name = store.getState().user.firstName;
       this.isLoggedIn = store.getState().isLoggedIn;
-
     }
   }
 

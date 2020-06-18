@@ -4,6 +4,9 @@ import { ProductsService } from 'src/app/services/products.service';
 import { Router } from '@angular/router';
 import { CategoriesModel } from 'src/app/models/categories-model';
 import { store } from 'src/app/redux/store';
+import { AuthService } from 'src/app/services/auth.service';
+import { NgForm } from '@angular/forms';
+import { FieldValidationService } from 'src/app/services/field-validations';
 
 @Component({
   selector: 'app-add-product',
@@ -18,54 +21,80 @@ export class AddProductComponent implements OnInit {
   public previewImage: any = null;
   public error: string;
 
-  constructor(private myProductsService: ProductsService, private myRouter: Router) { }
+  constructor(private myProductsService: ProductsService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService) { }
 
   ngOnInit(): void {
     this.categories = store.getState().shopCategories;
   }
 
-  public async addProduct() {
+  public async addProduct(addProductForm: NgForm) {
     try {
-      if (this.product.productPrice <= 0) {
-        this.product.productPrice = 0;
+
+      // check name is valid
+      if (this.product.productName.length < 3 || this.product.productName.length > 40) {
+        addProductForm.controls['productName'].setErrors({ 'invalid': true });
         return;
       }
+      addProductForm.controls['productName'].setErrors({ 'invalid': false });
+      addProductForm.controls['productName'].disable();
 
-      if (this.product.productName.length < 2 || this.product.productCategoryId <= 0 || !this.product.productImage) {
-        this.error = "Fields can't be empty"
+      // check price is valid
+      if (this.product.productPrice <= 0 || this.product.productPrice > 10000) {
+        addProductForm.controls['productPrice'].setErrors({ 'invalid': true });
         return;
       }
-      this.error = '';
+      addProductForm.controls['productPrice'].setErrors({ 'invalid': false });
+      addProductForm.controls['productPrice'].disable();
 
-      if (this.product.productImage.size> 1000000) {
-        this.error = "Max File size is 1 mb"
+      // check cateory is correct
+      if (this.myFieldValidationsService.categoryValidation(this.categories, this.product.productCategoryId)) {
+        addProductForm.controls['productCategory'].setErrors({ 'invalid': true });
+        return;
+      }
+      addProductForm.controls['productCategory'].setErrors({ 'invalid': false });
+      addProductForm.controls['productCategory'].disable();
+
+      // check file is in correct size
+      if (this.product.productImage) {
+        if (this.product.productImage.size > 1000000) {
+          this.error = "Max File size is 1 mb"
+          return;
+        }
       }
       this.error = '';
 
-      const addedProduct = await this.myProductsService.addProductAsync(this.product);
-      if (addedProduct) {
-        this.myProductsService.getStoreUpdateAdmin();
-      }
-      this.error = '';
-      setTimeout(() => this.myRouter.navigateByUrl("/shop"), 1000);
+      // create new product
+      await this.myProductsService.addProductAsync(this.product);
+      // redirect back to admin
+      setTimeout(() => this.myRouter.navigateByUrl("/admin"), 1000);
     }
     catch (err) {
       this.error = "Please Try again later";
+      // logs out client if jwt token has timed out
+      if (err.status === 401) {
+        const response = await this.myAuthService.logout();
+        // if logout successful, log redirect to home
+        if (response) {
+          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          return
+        }
+      }
     }
   }
 
+  // extracts files for preview
   public handleFileInput(files: FileList) {
     this.product.productImage = files.item(0);
     this.preview();
   }
 
   public preview() {
-    // Show preview 
+    // check type is image
     const mimeType = this.product.productImage.type;
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
-
+    // reads uploaded file and sets to previs
     const reader = new FileReader();
     reader.readAsDataURL(this.product.productImage);
     reader.onload = (_event) => {

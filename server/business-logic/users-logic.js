@@ -26,8 +26,8 @@ async function getOneUserAsync(uuid) {
 
 // add new user to data source
 async function addUserAsync(user) {
-    console.log(user);
     // check if email already exists in DB
+    console.log(user);
     const emailCheck = await checkIfEmailExist(user.email);
     const personalIdCheck = await checkIfPersonalIdExist(user.personalId) 
     user.uuid = uuid.v4();
@@ -42,7 +42,8 @@ async function addUserAsync(user) {
         };
     }
     // return response otherwise
-    return check;
+    console.log("here")
+    return emailCheck ? {message: personalIdCheck} : { message: emailCheck };
 }
 
 // check if email exists
@@ -52,6 +53,7 @@ async function checkIfEmailExist(email) {
     if (result.length) {
         return {
             success: false,
+            email: true,
             message: "Email Already Exist",
         }
     }
@@ -67,6 +69,7 @@ async function checkIfPersonalIdExist(personalId) {
     if (result.length) {
         return {
             success: false,
+            personalId: true,
             message: "Personal ID Already Exist",
         }
     }

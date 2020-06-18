@@ -12,6 +12,7 @@ export class ShopCategoriesService {
 
     constructor(private http: HttpClient) { }
 
+    // get all shop categories from data source
     public getAllCategoriesAsync(): Promise<CategoriesModel[]> {
         const headers = {
             authorization: "Bearer " + store.getState().token
@@ -19,7 +20,7 @@ export class ShopCategoriesService {
         return this.http.get<CategoriesModel[]>("http://localhost:3000/api/shop/categories", { headers: headers } ).toPromise();
     }
 
-
+    // set shop categories in the store
     public async setShopCategories(): Promise<boolean> {
       const categories = await this.getAllCategoriesAsync();
       if(categories){

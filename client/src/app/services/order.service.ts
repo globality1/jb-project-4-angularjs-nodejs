@@ -10,6 +10,7 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
+  // create new order in data source
   public async createNewOrder(order: OrderModel): Promise<any> {
     const headers = {
         authorization: "Bearer " + store.getState().token

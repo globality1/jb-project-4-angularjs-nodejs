@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CredentialsModel } from 'src/app/models/credentials-model';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { userShoppingCartService } from 'src/app/services/userShoppingCart.service';
-import { FieldValidationService } from 'src/app/services/fieldValidations.service';
+import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
+import { FieldValidationService } from 'src/app/services/field-validations';
 import { ShopCategoriesService } from 'src/app/services/categories.service';
 import { store } from 'src/app/redux/store';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -16,35 +17,28 @@ export class LoginComponent implements OnInit {
 
 
   public credentials = new CredentialsModel();
-  public errors = {
-    email: '',
-    password: '',
-    login: ''
-  };
+  public loginError: string;
 
-  constructor(private myAuthService: AuthService, private myRouter: Router, private myFieldValidationsService: FieldValidationService, private myShoppingCart: userShoppingCartService, private myShopCategories: ShopCategoriesService) { }
+
+  constructor(private myAuthService: AuthService, private myRouter: Router, private myFieldValidationsService: FieldValidationService) { }
 
   ngOnInit(): void {
   }
 
-  public validateForm() {
+  public validateForm(loginForm: NgForm) {
     // email validations
-    if (!this.myFieldValidationsService.checkIfEmpty(this.credentials.email).success) {
-      this.errorUpdater("Email Can't Be Empty", '', "Missing Email/Password")
+    if (!this.myFieldValidationsService.checkIfEmpty(this.credentials.email).success || !this.myFieldValidationsService.checkIfEmailFormat(this.credentials.email).success) {
+      loginForm.controls['email'].setErrors({ 'incorrect': true });
       return;
     }
+    loginForm.controls['email'].setErrors({ 'incorrect': false });
 
     // password validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.credentials.password).success) {
-      this.errorUpdater("", "Password Can't Be Empty", "Missing Email/Password")
+      loginForm.controls['password'].setErrors({ 'incorrect': true });
       return;
     }
-    
-    if (!this.myFieldValidationsService.checkIfEmailFormat(this.credentials.email).success) {
-      this.errorUpdater("Email must be in correct Format", '', "Please no try foolish hackings")
-      return;
-    }
-
+    loginForm.controls['password'].setErrors({ 'incorrect': false });
 
     // login user
     this.authLogin();
@@ -56,37 +50,22 @@ export class LoginComponent implements OnInit {
       const response = await this.myAuthService.loginFlow(this.credentials);
       // if user returned, store all data
       if (response) {
-        // check if cat exist
-        const shoppingCart = await this.myShoppingCart.checkCartExisting();
-        // get and construct shop categories in redux
-        const shopCategories = await this.myShopCategories.setShopCategories()
-        // if cart exist, move to shop area
-        if (shopCategories) {
-          const shoppingCartItems = await this.myShoppingCart.getUserShoppingCartItems();
-          if(shoppingCartItems != undefined) {
-          this.errorUpdater('', '', '')
-          if(store.getState().isAdmin) {
-            setTimeout(()=>{this.myRouter.navigateByUrl("/admin")}, 1000);
-          }
-          else if(!store.getState().isAdmin) {
-            setTimeout(()=>{this.myRouter.navigateByUrl("/shop")}, 1000);
-          }
-          }
+        if (store.getState().isAdmin) {
+          setTimeout(() => { this.myRouter.navigateByUrl("/admin") }, 1000);
+        }
+        else if (!store.getState().isAdmin) {
+          setTimeout(() => { this.myRouter.navigateByUrl("/shop") }, 1000);
         }
       }
     }
     catch (err) {
-      this.errorUpdater('', '', err.error)
+      if (err.status === 403) {
+        this.loginError = err.error;
+        return;
+      }
+      this.loginError = "Please Contact admin";
     }
   }
-  
-  // error changer custom function
-  private errorUpdater(emailError?, passwordError?, loginError?) {
-    this.errors = {
-      email: emailError,
-      password: passwordError,
-      login: loginError
-    }
-  }
+
 
 }
