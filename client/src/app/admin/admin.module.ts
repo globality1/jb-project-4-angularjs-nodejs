@@ -4,12 +4,12 @@ import { AdminComponent } from './admin/admin.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AddProductComponent } from './add-product/add-product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
-import { ProductsComponentAdmin } from './products-admin/products-admin.component';
 import { ProductCardComponentAdmin } from './product-card-admin/product-card-admin.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
+import { ProductsComponentAdmin } from './products-admin/products-admin.component';
 
 
 const adminRoutes: Routes = [

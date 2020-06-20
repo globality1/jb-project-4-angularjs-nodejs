@@ -13,41 +13,37 @@ export class Reducer {
 
             // action when login
             case ActionType.Login:
-                newAppState.isLoggedIn = true;
                 newAppState.user = action.payload.user;
-                newAppState.token = newAppState.user.token;
+                newAppState.isLoggedIn = true;
+                newAppState.token = newAppState.user.token.replace(/"/gi, "");
                 newAppState.isAdmin = newAppState.user.isAdmin;
-                sessionStorage.setItem("user", JSON.stringify(newAppState.user));
+                localStorage.setItem("token", JSON.stringify(newAppState.user.token));
+                sessionStorage.setItem("token", JSON.stringify(newAppState.user.token));
                 break;
 
             // action when storing products
             case ActionType.GetProducts:
                 newAppState.products = action.payload.products;
-                sessionStorage.setItem("products", JSON.stringify(newAppState.products));
                 break;
             
             // action when setting cart info
             case ActionType.SetCart:
                 newAppState.cart = action.payload.cart;
-                sessionStorage.setItem("cart", JSON.stringify(newAppState.cart));
                 break;
 
             // action when setting cart items  
             case ActionType.SetCartItems:
                 newAppState.cartItems = action.payload.cartItems;
-                sessionStorage.setItem("cartItems", JSON.stringify(newAppState.cartItems));
                 break;
 
             // action when setting shop categories
             case ActionType.SetShopCategories:
                 newAppState.shopCategories = action.payload.shopCategories;
-                sessionStorage.setItem("shopCategories", JSON.stringify(newAppState.shopCategories));
                 break;
 
-            // action when calcuating cart price
+            // action when calculating cart price
             case ActionType.SetNewCartTotalPrice:
                 newAppState.cartTotalPrice = action.payload.cartTotalPrice;
-                sessionStorage.setItem("cartTotalPrice", JSON.stringify(newAppState.cartTotalPrice));
                 break;
 
             // action when doing order
@@ -66,12 +62,9 @@ export class Reducer {
                 newAppState.cart = null;
                 newAppState.cartTotalPrice = 0;
                 newAppState.cartItems = null;
-                sessionStorage.removeItem("user");
-                sessionStorage.removeItem("products");
-                sessionStorage.removeItem("cart");
-                sessionStorage.removeItem("cartItems");
-                sessionStorage.removeItem("cartTotalPrice");
-                sessionStorage.removeItem("shopCategories");
+                sessionStorage.removeItem("orderItems");
+                sessionStorage.removeItem("token");
+                localStorage.removeItem("token");
                 break;
 
             default: break;

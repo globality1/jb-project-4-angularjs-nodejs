@@ -1,7 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { store } from 'src/app/redux/store';
 import { ActionType } from 'src/app/redux/actionType';
+import { PercentPipe } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
+import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 
 @Component({
   selector: 'app-shop',
@@ -10,19 +13,45 @@ import { ActionType } from 'src/app/redux/actionType';
 })
 export class ShopComponent implements OnInit {
 
-  constructor(private myRouter: Router) { }
+  public hideCart: boolean;
+  public myDiv;
+  public cartSize;
+  public productsSize;
 
-  ngOnInit(): void {
+  constructor(private myRouter: Router, private el: ElementRef, private myAuthService: AuthService, private myCartService: userShoppingCartService) { }
+
+  async ngOnInit(): Promise<void> {
     // check if user logged in, if no move him to login page
-    if (!store.getState().isLoggedIn) {
+    if (!store.getState().isLoggedIn && store.getState().token) {
+      const user = await this.myAuthService.reLogin(store.getState().token);
+      if(user) {
+          await this.myCartService.checkCartExisting();
+          await this.myCartService.getUserShoppingCartItems();
+          this.myRouter.navigateByUrl("/shop");
+        }
+    }
+    if (!store.getState().isLoggedIn && !localStorage.getItem("token")) {
       this.myRouter.navigateByUrl("/home");
     }
-    if (store.getState().isAdmin) {
-      this.myRouter.navigateByUrl("/admin");
+    if (!store.getState().isLoggedIn && localStorage.getItem("token")) {
+      this.myRouter.navigateByUrl("/shop");
+    }
+    if (store.getState().isLoggedIn) {
+      await this.myCartService.checkCartExisting();
+      await this.myCartService.getUserShoppingCartItems();
     }
     // remove orderItems from state so it will reset it self
     store.dispatch({ type: ActionType.SetOrderItems, payload: { orderItems: [] } })
+    this.cartSize = "25%";
+    this.productsSize = "75%";
   }
 
+  public hideCartFromUser(value: boolean) {
+    if(!this.myDiv) {
+      this.myDiv = this.el.nativeElement.querySelectorAll("div")[1]
+     }
+    this.hideCart = value;
+    this.myDiv.hidden = this.hideCart;
+  }
 
 }

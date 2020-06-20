@@ -22,14 +22,6 @@ export class OrderComponent implements OnInit {
 
   public creditCardValue: number;
 
-  public errors = {
-    city: "",
-    address: "",
-    orderDate: "",
-    creditCard: "",
-    order: ""
-  };
-
   public cities = ["Tel Aviv", "Haifa", "Raanana", "Bat Yam", "Holon", "Hertzelia", "Ashkelon", "Ashdod", "Beer Sheva"];
 
 
@@ -39,6 +31,16 @@ export class OrderComponent implements OnInit {
     // setting min order date of tomorrow
     this.todayDate = new Date();
     this.todayDate.setDate(this.todayDate.getDate() + 1);
+  }
+
+    // fill in shipping details from user infromation
+  public fillInAddressDetails(orderForm: NgForm) {
+    // set city and address from store
+    this.newOrder.city = store.getState().user.city;
+    this.newOrder.address = store.getState().user.address;
+    // enable form fields in case it was disabled from some previous action
+    orderForm.controls['address'].enable();
+    orderForm.controls['city'].enable()
   }
 
   public validateOrderForm(orderForm: NgForm) {
@@ -116,18 +118,9 @@ export class OrderComponent implements OnInit {
         return;
       }
       // if something else
-      this.errors.order = "Please contact your admin for more information";
+      orderForm.errors.setErrors({'finalError': "Please contact your admin for more information"});
     }
 
   }
 
-  // full in shipping details from user infromation
-  public fillInAddressDetails(orderForm: NgForm) {
-    // set city and address from store
-    this.newOrder.city = store.getState().user.city;
-    this.newOrder.address = store.getState().user.address;
-    // enable form fields in case it was disabled from some previous action
-    orderForm.controls['address'].enable();
-    orderForm.controls['city'].enable()
-  }
 }

@@ -15,10 +15,7 @@ const fileUpload = require("express-fileupload");
 const fs = require("fs");
 const cors = require("cors");
 const io = require("socket.io");
-const expressSession = require("express-session");
 const bodyParser = require("body-parser")
-
-
 
 const server = express();
 
@@ -28,14 +25,6 @@ server.use(cors({ origin: "http://localhost:4200", credentials: true }));
 server.use(express.json({limit: '50mb'}));
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(fileUpload());
-
-// create an express session 
-server.use(expressSession({
-    name: "Online-Shop-Project-JB", // session key, where the value is the session id.
-    secret: "T0d4y1sTh3D4y", // Encryption key
-    resave: true, // Start counting session time from scratch on each request.
-    saveUninitialized: false // Don't create a session for request which doesn't need a session
-}));
 
 // removes any tags from any values that goes into the system
 server.use(sanitize);

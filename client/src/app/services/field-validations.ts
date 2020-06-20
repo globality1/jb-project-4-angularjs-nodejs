@@ -36,7 +36,7 @@ export class FieldValidationService {
             success: true
         }
     }
-    
+
     // personal id validation
     public checkIfPersonalIdNotFake(valueToCheck: number) {
         // correct format validation for email - so it will be [1-9,a-z,any symbol and english]@[email].[domain]
@@ -49,7 +49,7 @@ export class FieldValidationService {
             success: true
         }
     }
-    
+
     // check if  is valid
     public checkIfFieldInZone(valueToCheck: string) {
         // only words allowed with spaces
@@ -63,7 +63,7 @@ export class FieldValidationService {
             success: true
         }
     }
-    
+
     // check if password is valid
     public checkIfPasswordValid(valueToCheck: string) {
         // create a regex check for password at least 1 upper case, 1 lower case and 1 special character
@@ -94,13 +94,17 @@ export class FieldValidationService {
     }
 
     // filters all products with given category from products array
-  public categoryValidation(categories: CategoriesModel[], id: number) {
-    for (let i = 0; i < categories.length; i++) {
-      if (categories[i].categoryId === id) {
-        return true;
-      }
+    public categoryValidation(categories: CategoriesModel[], id: number) {
+        let validCategory: boolean;
+        for (let i = 0; i < categories.length; i++) {
+            if (+categories[i].categoryId === +id) {
+                validCategory = true;
+            }
+        }
+        if (validCategory) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
 }

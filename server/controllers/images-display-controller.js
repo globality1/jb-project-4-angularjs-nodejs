@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 // GET /api/images/products/:name
-router.get("/products/:imgName", async (request, response) => {
+router.get("/products/:_imgName", async (request, response) => {
     try {
-        response.sendFile(request.params.imgName,  { root: "./uploads/products" });
+        response.sendFile(request.params._imgName,  { root: "./uploads/products" });
     }
     catch (err) {
         response.status(500).send(err.message);
@@ -12,9 +12,9 @@ router.get("/products/:imgName", async (request, response) => {
 });
 
 // GET /api/images/main/:name
-router.get("/main/:imgName", async (request, response) => {
+router.get("/main/:_imgName", async (request, response) => {
     try {
-        response.sendFile(request.params.imgName,  { root: "./uploads/main" });
+        response.sendFile(request.params._imgName,  { root: "./uploads/main" });
     }
     catch (err) {
         response.status(500).send(err.message);

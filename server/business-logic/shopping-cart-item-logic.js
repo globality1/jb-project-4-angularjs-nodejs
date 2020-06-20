@@ -18,9 +18,9 @@ async function removeItemToCartAsync(id) {
 };
 
 // remove all shopping cart item
-async function removeAllItemFromCartAsync(cartId) {
-    const sql = "DELETE FROM shopping_cart_items WHERE shopping_cart_id = ? ";
-    await dal.executeAsync(sql, [cartId]);
+async function removeAllItemFromCartAsync(cartId, productId) {
+    const sql = "DELETE FROM shopping_cart_items WHERE shopping_cart_id = ? and product_id = ?";
+    await dal.executeAsync(sql, [cartId, productId]);
     return cartId;
 };
 

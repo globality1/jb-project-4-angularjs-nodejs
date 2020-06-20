@@ -5,8 +5,8 @@ div {
     overflow: auto;
 }
 
-div, div > * { border: 1px solid black; }
+div, div > * { outline: 1px solid black; }
 header, footer { grid-column: span 12;grid-row: span 1;}
-main { grid-column: span 12; height: 100%; grid-row: span 11; }
+main { grid-column: span 12; height: 100%; grid-row: span 10; }
 
 

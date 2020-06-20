@@ -56,7 +56,7 @@ export class EditProductComponent implements OnInit {
       editProductForm.controls['productPrice'].disable();
 
       // check cateory is correct and is real from the category array
-      if (this.myFieldValidationsService.categoryValidation(this.categories, this.product.productCategoryId)) {
+      if (!this.myFieldValidationsService.categoryValidation(this.categories, this.product.productCategoryId)) {
         editProductForm.controls['productCategory'].setErrors({ 'invalid': true });
         return;
       }
@@ -74,11 +74,14 @@ export class EditProductComponent implements OnInit {
 
       // update product
       await this.myProductsService.updateProductAsync(this.product);
+
+      store.getState().socket.emit("update-from-app", 'Success');
       // redirect back to admin
       setTimeout(() => this.myRouter.navigateByUrl("/admin"), 1000);
     }
     catch (err) {
-      this.error = "Please Try again";
+      // this.error = "Please Try again";
+      this.error = err.message;
       // logs out client if jwt token has timed out
       if (err.status === 401) {
         const response = await this.myAuthService.logout();

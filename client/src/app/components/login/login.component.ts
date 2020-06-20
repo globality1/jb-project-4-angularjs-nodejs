@@ -26,12 +26,14 @@ export class LoginComponent implements OnInit {
   }
 
   public validateForm(loginForm: NgForm) {
+    this.loginError = '';
     // email validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.credentials.email).success || !this.myFieldValidationsService.checkIfEmailFormat(this.credentials.email).success) {
       loginForm.controls['email'].setErrors({ 'incorrect': true });
       return;
     }
     loginForm.controls['email'].setErrors({ 'incorrect': false });
+    loginForm.controls['email'].disable();
 
     // password validations
     if (!this.myFieldValidationsService.checkIfEmpty(this.credentials.password).success) {
@@ -39,31 +41,37 @@ export class LoginComponent implements OnInit {
       return;
     }
     loginForm.controls['password'].setErrors({ 'incorrect': false });
+    loginForm.controls['password'].disable();
 
     // login user
-    this.authLogin();
+    this.authLogin(loginForm);
   }
 
-  private async authLogin() {
+  private async authLogin(loginForm: NgForm) {
     try {
       // get user response from data source
       const response = await this.myAuthService.loginFlow(this.credentials);
       // if user returned, store all data
       if (response) {
         if (store.getState().isAdmin) {
-          setTimeout(() => { this.myRouter.navigateByUrl("/admin") }, 1000);
+          this.myRouter.navigateByUrl("/admin");
+          return;
         }
         else if (!store.getState().isAdmin) {
-          setTimeout(() => { this.myRouter.navigateByUrl("/shop") }, 1000);
+          this.myRouter.navigateByUrl("/shop");
+          return;
         }
       }
     }
     catch (err) {
+      // enable form if error is due to incorrect password/email
+      loginForm.controls['email'].enable();
+      loginForm.controls['password'].enable();
       if (err.status === 403) {
         this.loginError = err.error;
         return;
       }
-      this.loginError = "Please Contact admin";
+      this.loginError = 'Please contact the Admin';
     }
   }
 

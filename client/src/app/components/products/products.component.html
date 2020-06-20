@@ -1,34 +1,49 @@
-<div class="container-fluid-filters container-fluid">
-    <div class="jumbotron-filters jumbotron">
-        <div class="productsSearch">
-            <span>Search: </span>
-            <mat-form-field>
-                <input matNativeControl type="text" (input)="filterProductsBySearch()" name="search"
-                    [(ngModel)]="searchValue">
-            </mat-form-field>
-        </div>
-        <br />
-        <div>
-            <div class="row categoriesFilter">
-                <button class="categoryButton" mat-stroked-button color="primary"
-                    (click)="filterProductsByCategory(0)">All</button>
-                <div *ngFor="let c of shopCategories">
+<div>
+    <div class="container-fluid-filters container-fluid">
+        <div class="jumbotron-filters jumbotron">
+            <div class="productsSearch">
+                <span>Search: </span>
+                <mat-form-field>
+                    <input matNativeControl type="text" (input)="filterProductsBySearch()" name="search"
+                        [(ngModel)]="searchValue">
+                </mat-form-field>
+            </div>
+            <br />
+            <div>
+                <div *ngIf="!shopCategories" class="empty">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div *ngIf="shopCategories" class="row categoriesFilter">
                     <button class="categoryButton" mat-stroked-button color="primary"
-                        (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
+                        (click)="filterProductsByCategory(0)">All</button>
+                    <div *ngFor="let c of shopCategories">
+                        <button class="categoryButton" mat-stroked-button color="primary"
+                        [ngClass]="{'usedRightNow': c.categoryId === categoryId }" (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container-fluid-products container-fluid">
-    <div class="jumbotron-products jumbotron">
-        <div *ngIf="!productsDisplay.length">No Products Found</div>
-        <div *ngIf="productsDisplay">
-            <div *ngFor="let p of productsDisplay">
-                <app-product-card [id]="'cardOfProductId' + p.id" productId={{p.id}} imageSource={{p.productImageName}}
-                    productName={{p.productName}} productPrice={{p.productPrice}} >
-                </app-product-card>
+    <div class="container-fluid-products container-fluid">
+        <div class="jumbotron-products jumbotron">
+            <div>
+                <div *ngIf="!productsDisplay" class="empty">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div *ngIf="products && !productsDisplay" class="empty">No Products Found</div>
+                <div *ngIf="productsDisplay">
+                    <div *ngFor="let p of productsDisplay">
+                        <app-product-card [id]="'cardOfProductId' + p.id" productId={{p.id}}
+                            imageSource={{p.productImageName}} productName={{p.productName}}
+                            productPrice={{p.productPrice}}>
+                        </app-product-card>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

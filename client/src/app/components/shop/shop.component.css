@@ -21,6 +21,18 @@
     .e-splitter.e-splitter-horizontal {
         display: inline-block;
   }
-  } 
+} 
 
 
+.cartIcon {
+    float: left;
+    z-index: 5000;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    margin-top: 350px;
+}
+
+.cartIcon:hover {
+    cursor: pointer;
+  }

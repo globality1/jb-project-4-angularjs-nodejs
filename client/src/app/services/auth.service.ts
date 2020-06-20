@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user-model';
 import { store } from '../redux/store';
 import { ActionType } from '../redux/actionType';
-import { ProductModel } from '../models/product-model';
 import axios from "axios";
-import { ProductsService } from './products.service';
-import { userShoppingCartService } from './user-shopping-cart';
-import { ShopCategoriesService } from './categories.service';
+
+import { apiBaseURL } from 'src/environments/environment';
+import { authHeaders } from 'src/environments/environment';
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-    constructor(private http: HttpClient, private myProductsService: ProductsService, private myShoppingCart: userShoppingCartService, private myShopCategories: ShopCategoriesService) { }
+    constructor(private http: HttpClient) { }
 
     private authLogin(credentials): Promise<UserModel[]> {
         return this.http.post<UserModel[]>("http://localhost:3000/api/auth/login", credentials).toPromise();
@@ -24,47 +24,37 @@ export class AuthService {
     public async loginFlow(credential): Promise<boolean> {
         const user = await this.authLogin(credential);
         if (user) {
-            return this.storeUserInfo(user);
+            store.dispatch({ type: ActionType.Login, payload: { user } });
+            return true;
         }
         else {
             return false;
         }
     }
 
-    // store user information and get initial products
-    private async storeUserInfo(user: UserModel[]): Promise<boolean> {
-        if (user) {
-            // store user
+    private getUserByToken(token: string): Promise<UserModel> {
+        return this.http.post<UserModel>("http://localhost:3000/api/auth/relogin", token, { headers: authHeaders.createHeader(store.getState().token) }).toPromise()
+    }
+
+    public async reLogin(token: string) {
+        try {
+            const user = await this.getUserByToken(token);
+            if (!user) {
+                this.logout();
+            }
             store.dispatch({ type: ActionType.Login, payload: { user } });
-            // get all products
-            await this.myProductsService.getAllProductsAsync();
-            // check existing cart and create new one in data source if none
-            await this.myShoppingCart.checkCartExisting();
-            // get and construct shop categories in redux
-            await this.myShopCategories.setShopCategories()
-            // if cart exist, move to shop area
-            await this.myShoppingCart.getUserShoppingCartItems();
-            return true;
+            return user;
         }
-        else {
-            return false
+        catch (err) {
+            this.logout();
         }
     }
 
     // had some trouble converting this one to http for some reason so went with axios
     public async logout() {
-        try {
-            const response = await axios.post("http://localhost:3000/api/auth/logout");
-            // check if response
-            if (response) {
-                store.getState().socket.disconnect();
-                store.dispatch({ type: ActionType.Logout });
-                return true;
-            }
-        }
-        catch (err) {
-            console.log(err.response ? err.response.data : err.message);
-        }
+        store.getState().socket.disconnect();
+        store.dispatch({ type: ActionType.Logout });
+        return true;
     }
 
 }

@@ -34,20 +34,8 @@ export class HeaderComponent implements OnInit {
 
   // logout function
   public async logout() {
-    try {
-      const response = await this.myAuthService.logout();
-      if (response) {
-        this.name = "Guest";
-        this.isLoggedIn = false;
-        setTimeout(() => this.myRouter.navigateByUrl("/home"), 200);
-        // store dispatch
-        store.getState().socket.disconnect();
-        store.dispatch({ type: ActionType.Logout });
-      }
-    }
-    catch (err) {
-      console.log(err.response ? err.response.data : err.message);
-    }
+    this.myAuthService.logout();
+    this.myRouter.navigateByUrl("/home");
   }
 
 

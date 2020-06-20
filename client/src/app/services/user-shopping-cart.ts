@@ -5,6 +5,8 @@ import { store } from '../redux/store';
 import { CartModel } from '../models/cart-model';
 import { ActionType } from '../redux/actionType';
 import { ShoppingCartItemModel } from '../models/shopping-cart-item-model';
+import { apiBaseURL } from 'src/environments/environment';
+import { authHeaders } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -14,22 +16,19 @@ export class userShoppingCartService {
     constructor() { }
 
     // check if cart exist
-    public async checkCartExisting(): Promise<boolean> {
-        const cart = await this.getUserShoppingCart()
+    public async checkCartExisting(): Promise<CartModel[]> {
+        const cart = await this.getUserShoppingCart();
         if (cart) {
             store.dispatch({ type: ActionType.SetCart, payload: { cart } });
-            return true;
+            return cart;
         }
     }
 
     // get cart from data source (if no cart, the server will create new one)
-    public getUserShoppingCart(): Promise<CartModel[]> {
-        const headers = {
-            authorization: "Bearer " + store.getState().token
-        }
+    public async getUserShoppingCart(): Promise<CartModel[]> {
         const uuid = store.getState().user.uuid;
         return new Promise<CartModel[]>((resolve, reject) => {
-            axios.get<CartModel[]>("http://localhost:3000/api/cart/information/" + uuid, { headers: headers })
+            axios.get<CartModel[]>(apiBaseURL + "/cart/information/" + uuid, { headers: authHeaders.createHeader(store.getState().token) })
                 .then(response => resolve(response.data))
                 .catch(err => reject(err));
         });
@@ -57,13 +56,10 @@ export class userShoppingCartService {
     }
 
     // get all user shopping cart items from the data source
-    private getUserShoppingCartItemsFromDataSource(): Promise<ShoppingCartItemModel[]> {
-        const headers = {
-            authorization: "Bearer " + store.getState().token
-        }
+    private async getUserShoppingCartItemsFromDataSource(): Promise<ShoppingCartItemModel[]> {
         const cartId = store.getState().cart.id;
         return new Promise<ShoppingCartItemModel[]>((resolve, reject) => {
-            axios.get<ShoppingCartItemModel[]>("http://localhost:3000/api/cart/information/items/" + cartId, { headers: headers })
+            axios.get<ShoppingCartItemModel[]>(apiBaseURL + "/cart/information/items/" + cartId, { headers: authHeaders.createHeader(store.getState().token) })
                 .then(response => resolve(response.data))
                 .catch(err => reject(err));
         })

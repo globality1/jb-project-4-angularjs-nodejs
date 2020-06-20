@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
 export class ProductCardComponent implements OnInit {
 
   public newCartItem = new ShoppingCartItemModel;
-  public isAdmin: number;
 
   public constructor(private myShoppingCartActions: UserShoppingCartItemsService, private myAuthService: AuthService, private myRouter: Router) { };
+
   @Input()
   public productId: number;
 
@@ -30,8 +30,11 @@ export class ProductCardComponent implements OnInit {
   public productPrice: number;
 
   ngOnInit() {
-    this.isAdmin = store.getState().isAdmin;
     this.newCartItem.quantity = 0;
+    store.subscribe(() => {
+      if (store.getState().cart)
+        this.newCartItem.cartId = store.getState().cart.id
+    });
   }
 
   public async addProductToCart() {
@@ -54,13 +57,10 @@ export class ProductCardComponent implements OnInit {
     }
     catch (err) {
       // logs out client if jwt token has timed out
+      // logs out client if jwt token has timed out
       if (err.status === 401) {
-        const response = await this.myAuthService.logout();
-        // if logout successful, log redirect to home
-        if (response) {
-          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
-          return
-        }
+        this.myAuthService.logout();
+        this.myRouter.navigateByUrl("/home");
       }
     }
   }

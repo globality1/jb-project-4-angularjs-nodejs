@@ -28,24 +28,18 @@ async function addProductAsync(product, fileName) {
     return product;
 }
 
-// update product fully
-async function updateFullProductAsync(product, fileName) {
-    const sql = "UPDATE products SET product_name = ?, product_category_id = ?, product_price = ?, product_image = ? WHERE id = ?"
-    const info = await dal.executeAsync(sql, [product.productName, product.productCategoryId, product.productPrice, fileName, product.productId]);
-    return info.affectedRows === 0 ? null : product;
-}
 
 async function updatePartialProductAsync(product, fileName) {
 
     let sql = "UPDATE products SET ";
 
-    if (product.productName) {
+    if (product.productName.length > 0) {
         sql += `product_name = '${product.productName}',`
     }
-    if (product.productCategoryId) {
+    if (product.productCategoryId.length > 0) {
         sql += ` product_category_id = '${product.productCategoryId}',`
     }
-    if (product.productPrice) {
+    if (product.productPrice.length > 0) {
         sql += `product_price = '${product.productPrice}',`
     }
     if (fileName.length > 0) {
@@ -58,6 +52,7 @@ sql = sql.substr(0, sql.length - 1);
 sql += ` WHERE id = '${product.productId}'`;
 
 const info = await dal.executeAsync(sql);
+
 return info.affectedRows === 0 ? null : product;
 }
 
@@ -66,6 +61,5 @@ module.exports = {
     getAllProductsAsync,
     getOneProductAsync,
     addProductAsync,
-    updateFullProductAsync,
     updatePartialProductAsync
 };

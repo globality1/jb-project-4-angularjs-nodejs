@@ -7,7 +7,7 @@ const jwtVerifier = require("../middleware/jwt-verify");
 const jwt = require("jsonwebtoken");
 
 // GET api/cart/information/:uuid (Also creates new Cart if there is no existing one)
-router.get("/:uuid", jwtVerifier.verifyToken, (request, response) => {
+router.get("/:_uuid", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         // check if error returns from jwt validation
@@ -18,7 +18,7 @@ router.get("/:uuid", jwtVerifier.verifyToken, (request, response) => {
         else {
             try {
                 // get id param from request
-                const uuid = request.params.uuid;
+                const uuid = request.params._uuid;
                 // call to shoppingCartLogic and retrieve single active cart based on uuid
                 const cart = await shoppingCartLogic.getShoppingCartAsync(uuid);
                 // if cart doesn't exist, create new one
@@ -40,7 +40,7 @@ router.get("/:uuid", jwtVerifier.verifyToken, (request, response) => {
 });
 
 // GET api/cart/information/items/:id (Also creates new Cart if there is no existing one)
-router.get("/items/:id", jwtVerifier.verifyToken, (request, response) => {
+router.get("/items/:_id", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         // check if error returns from jwt validation
@@ -51,7 +51,7 @@ router.get("/items/:id", jwtVerifier.verifyToken, (request, response) => {
         else {
             try {
                 // get id param from request
-                const id = +request.params.id;
+                const id = +request.params._id;
                 // call to shoppingCartLogic and retrieve single active cart based on uuid
                 const cartItems = await shoppingCartLogic.getShoppingCartItemsAsync(id);
                 // return cart items

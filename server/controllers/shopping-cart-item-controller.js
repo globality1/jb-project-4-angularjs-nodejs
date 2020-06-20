@@ -36,7 +36,7 @@ router.post("/", jwtVerifier.verifyToken, (request, response) => {
 
 // remove specfic item from cart by the item id in cart data source
 // delete api/cart/actions/:id
-router.delete("/:id", jwtVerifier.verifyToken, (request, response) => {
+router.delete("/:_productId", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid   
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         if (err) {
@@ -46,9 +46,11 @@ router.delete("/:id", jwtVerifier.verifyToken, (request, response) => {
         else {
             try {
                 // get id param from request
-                const id = +request.params.id;
+                const productToRemove = +request.params._productId;
+                console.log(authData);
+                console.log(request.session);
                 // send delete request to the data source based on id
-                await shoppingCartItemLogic.removeItemToCartAsync(id);
+                await shoppingCartItemLogic.removeItemToCartAsync(request.session.cart.id, productToRemove);
                 // return 204 on deletion
                 response.sendStatus(204);
             }
@@ -63,7 +65,7 @@ router.delete("/:id", jwtVerifier.verifyToken, (request, response) => {
 
 // deletes all items in cart for 
 // delete api/cart/actions/empty/:cartId
-router.delete("/empty/:cartId", jwtVerifier.verifyToken, (request, response) => {
+router.delete("/empty/:_cartId", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid   
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         if (err) {
@@ -73,7 +75,7 @@ router.delete("/empty/:cartId", jwtVerifier.verifyToken, (request, response) => 
         else {
             try {
                 // get cartId param from request
-                const cartId = +request.params.cartId;
+                const cartId = +request.params._cartId;
                 // send delete request to the data source based on id
                 await shoppingCartItemLogic.removeAllItemFromCartAsync(cartId);
                 // return 204 on deletion

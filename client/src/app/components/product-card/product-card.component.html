@@ -1,4 +1,4 @@
-<div class="card" *ngIf="!isAdmin" data-toggle="modal" [attr.data-target]="'#productQuantity' + productId">
+<div class="card" data-toggle="modal" [attr.data-target]="'#productQuantity' + productId">
     <div class="headerImage">
         <img class="productImage" [src]="'http://localhost:3000/api/images/products/'+imageSource" [alt]="imageSource">
     </div>

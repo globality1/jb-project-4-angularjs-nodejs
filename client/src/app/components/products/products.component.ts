@@ -5,6 +5,7 @@ import { CategoriesModel } from 'src/app/models/categories-model';
 import { ProductFiltersService } from 'src/app/services/product-filters.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { ActionType } from 'src/app/redux/actionType';
+import { ShopCategoriesService } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-products',
@@ -17,31 +18,42 @@ export class ProductsComponent implements OnInit {
   public products: ProductModel[];
   public shopCategories: CategoriesModel[];
   public searchValue: string;
-  public cartTotalPrice: number;
   public productsDisplay: ProductModel[];
+  public categoryId: number;
 
-  constructor(private productFilters: ProductFiltersService, private myProductsService: ProductsService) { }
+  constructor(private productFilters: ProductFiltersService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
 
-  ngOnInit() {
-    // connect to socket to receive update information
+  async ngOnInit() {
+    // connect to socket in this area
     store.getState().socket.connect();
-    // subscribe for product changes
-    // and make products be based on socket if any update / new product event occurs - same for everyone
+
+    // for the filters
+    this.categoryId = 0;
+
+    // store subscribe for changes in store
     store.subscribe(() => {
-      this.products = store.getState().products;
-      this.productsDisplay = store.getState().products;
+      this.products = this.productsDisplay = store.getState().products;
     });
-    // get products from store on init
-    this.myProductsService.activateSocket();
-    // set products from store
-    this.products = store.getState().products;
-    this.shopCategories = store.getState().shopCategories;
-    // set initial display of all products as the default
-    this.productsDisplay = this.products;
+
+    // if products exist in store
+    if (store.getState().products) {
+      this.products = this.productsDisplay = store.getState().products;
+      this.shopCategories = store.getState().shopCategories;
+    }
+
+    // if products doesn't exist in store
+    if (!store.getState().products) {
+      this.shopCategories = await this.myShopCategories.setShopCategories();
+      this.products = this.productsDisplay = await this.myProductsService.setShopProducts();
+    }
+    // socket to update products and view on the products page
+    store.getState().socket.on("update-from-server", (products: ProductModel[]) => {
+      store.dispatch({ type: ActionType.GetProducts, payload: { products } });
+    });
   }
 
-  // function to filter by category
   public filterProductsByCategory(id: number) {
+    this.categoryId = id;
     // check if id is 0 and there is input in the search field
     if (id === 0 && this.searchValue) {
       // filter search value
@@ -57,7 +69,7 @@ export class ProductsComponent implements OnInit {
     // if id not 0, and search value exist
     if (this.searchValue && id > 0) {
       // filter all products by search value
-      this.filterProductsBySearch();
+      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
       // filter in the search filtered products
       this.productsDisplay = this.productFilters.filterByCategory(this.productsDisplay, id);
       return;
@@ -69,8 +81,17 @@ export class ProductsComponent implements OnInit {
 
   // function to filter by search input
   public filterProductsBySearch() {
-    if (this.searchValue.length > 0) {
-      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase())
+    if (this.searchValue.length > 0 && this.categoryId === 0) {
+      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
+      return;
+    }
+    if (this.searchValue.length > 0 && this.categoryId > 0) {
+      this.filterProductsByCategory(this.categoryId);
+      return;
+    }
+    if (this.searchValue.length === 0 && this.categoryId > 0) {
+      this.filterProductsByCategory(this.categoryId);
+      return;
     }
     else if (this.searchValue.length === 0) {
       this.productsDisplay = this.products;

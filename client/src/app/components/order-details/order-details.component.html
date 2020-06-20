@@ -67,7 +67,7 @@
                     </button>
                     <br/>
                     <br/>
-                    <div class="errorsDisplay" *ngIf="errors.order.length>0">{{errors.order}}</div>
+                    <div class="errorsDisplay" *ngIf="orderForm.errors?.finalError">{{orderForm.errors?.finalError}}</div>
                 </div>
             </div>
         </form>

@@ -1,12 +1,15 @@
 <div id='container'>
+        <div *ngIf="hideCart" class="oi oi-cart cartIcon">
+                <img (click)="hideCartFromUser(false)" src="/assets/images/cart-icon.svg">
+        </div>
         <ejs-splitter #resizegrip id='resizegrip'>
                 <e-panes>
-                        <e-pane size='30%' min='20%' max='50%'>
+                        <e-pane size="25%" min='25%' max='50%' >
                                 <ng-template #content>
-                                        <app-cart allowEdit={{true}}></app-cart>
+                                        <app-cart allowEdit={{true}} (hideCart)="hideCartFromUser($event)"></app-cart>
                                 </ng-template>
                         </e-pane>
-                        <e-pane size='70%' min='50%' max='90%'>
+                        <e-pane size={{productsSize}} min='50%' max='100%'>
                                 <ng-template #content>
                                         <app-products></app-products>
                                 </ng-template>

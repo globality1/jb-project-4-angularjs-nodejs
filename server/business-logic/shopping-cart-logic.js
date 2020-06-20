@@ -21,7 +21,7 @@ async function getShoppingCartAsync(uuid) {
 
 // get all Items from cart
 async function getShoppingCartItemsAsync(id) {
-    const sql = "SELECT sci.id, p.product_name as productName, sci.quantity as quantity, sci.total_price as totalPrice, p.product_image as productImageName FROM shopping_cart_items sci LEFT JOIN products p ON p.id = sci.product_id WHERE shopping_cart_id = ? ";
+    const sql = "SELECT sci.id as id, p.product_name as productName, sci.product_id as productId, SUM(sci.quantity) as quantity, SUM(sci.total_price) as totalPrice, p.product_image as productImageName FROM shopping_cart_items sci LEFT JOIN products p ON p.id = sci.product_id WHERE shopping_cart_id = ? group by sci.product_id";
     const cartItems = await dal.executeAsync(sql, [id]);
     return cartItems;
 }

@@ -22,6 +22,9 @@ export class HomeComponent implements OnInit {
       if (store.getState().isLoggedIn) {
         this.myRouter.navigateByUrl("/shop");
       }
+      if (!store.getState().isLoggedIn && localStorage.getItem("token")) {
+        this.myRouter.navigateByUrl("/shop");
+      }
       // adding all sort of visual fixes in case data source returns erros or something not wanted
       const productsCount = await this.myHomeService.getProductsCount();
       const ordersCount = await this.myHomeService.getOrdersCount();

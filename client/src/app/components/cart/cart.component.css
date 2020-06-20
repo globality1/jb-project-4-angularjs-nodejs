@@ -50,3 +50,30 @@
     font-size: 15px;
     font-weight: 500;
 }
+
+
+/* change in display for mobile */
+@media only screen and (max-width: 768px) {
+    .hideCartButton {
+        display: none;
+  }
+} 
+
+.hideCartButton {
+    float: right;
+    width: 25px;
+    height: 25px;
+    margin-top: -45px;
+    margin-right: 50px;
+}
+
+.hideCartButton:hover {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .empty-cart {
+        float: right;
+        margin-top: -10px!important;
+    }
+} 

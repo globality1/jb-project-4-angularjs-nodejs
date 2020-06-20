@@ -47,7 +47,7 @@ export class AddProductComponent implements OnInit {
       addProductForm.controls['productPrice'].disable();
 
       // check cateory is correct
-      if (this.myFieldValidationsService.categoryValidation(this.categories, this.product.productCategoryId)) {
+      if (!this.myFieldValidationsService.categoryValidation(this.categories, this.product.productCategoryId)) {
         addProductForm.controls['productCategory'].setErrors({ 'invalid': true });
         return;
       }
@@ -65,6 +65,8 @@ export class AddProductComponent implements OnInit {
 
       // create new product
       await this.myProductsService.addProductAsync(this.product);
+
+      store.getState().socket.emit("update-from-app", 'Success');
       // redirect back to admin
       setTimeout(() => this.myRouter.navigateByUrl("/admin"), 1000);
     }

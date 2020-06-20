@@ -34,20 +34,19 @@ router.get("/", jwtVerifier.verifyToken, (request, response) => {
 });
 
 // GET api/products/:id
-router.get("/:id", jwtVerifier.verifyToken, (request, response) => {
+router.get("/:_id", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         // adding another securit inside of the server to overcome changes inside of the angular application so that only admin can do changes
-        const userDetails = jwt.decode(request.token);
         // check if error returns from jwt validation
-        if (err || userDetails.user.isAdmin !== 1) {
+        if (err || authData.user.isAdmin !== 1) {
             // return 401 and response from jwt function
             response.status(401).send(err.message)
         }
         else {
             try {
                 // get id param from request
-                const id = +request.params.id;
+                const id = +request.params._id;
                 // call to productsLogic and retrieve single product based on id
                 const product = await productsLogic.getOneProductAsync(id);
                 // if products doesn't exit on specific id, return 404
@@ -71,8 +70,7 @@ router.post("/", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         // adding another security inside of the server to overcome changes inside of the angular application so that only admin can do changes
-        const userDetails = jwt.decode(request.token);
-        if (err || userDetails.user.isAdmin !== 1) {
+        if (err || authData.user.isAdmin !== 1) {
             // returned error based on auth problem token or permissions
             (err) ? response.status(401).send(err.message) : response.status(401).send("Not Authorized, Insufficient permissions")
         }
@@ -120,8 +118,7 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
     // verify token, if exists and valid continues to promise, if invalid will give out error of invalid
     jwt.verify(request.token, config.jwt.secretKey, async (err, authData) => {
         // adding another security inside of the server to overcome changes inside of the angular application so that only admin can do changes
-        const userDetails = jwt.decode(request.token);
-        if (err || userDetails.user.isAdmin !== 1) {
+        if (err || authData.user.isAdmin !== 1) {
             // returned error based on auth problem token or permissions
             (err) ? response.status(401).send(err.message) : response.status(401).send("Not Authorized, Insufficient permissions");
             return;
@@ -130,6 +127,9 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
             try {
                 // get product from request body
                 const product = request.body;
+                if (!product.productName || !product.productPrice || +product.productPrice < 0) {
+                    response.status(500).send("Data can't be Empty or Bellow 0");
+                }
                 if (product.productName && !fieldValidator.validateProductName(product.productName)) {
                     response.status(500).send("Name should be 3-40 characters long");
                 }
@@ -139,6 +139,7 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
                 // const filename in case none is being passed to pass empty string
                 const fileName = ''
                 if (request.files) {
+                    console.log("got here")
                     // create separate file object
                     const uploadFile = request.files.productImage;
                     // get file extension
@@ -156,6 +157,7 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
                 return;
             }
             catch (err) {
+                console.log(err);
                 // return 500 if error occurs while attempt to get products from data source
                 response.status(500).send(err.message);
             }
