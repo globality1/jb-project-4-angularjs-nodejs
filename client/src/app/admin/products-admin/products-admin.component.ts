@@ -33,6 +33,7 @@ export class ProductsComponentAdmin implements OnInit {
     // and make products be based on socket if any update / new product event occurs - same for everyone
     store.subscribe(() => {
       this.products = this.productsDisplay = store.getState().products;
+      this.shopCategories = store.getState().shopCategories
     });
 
     if (store.getState().products) {

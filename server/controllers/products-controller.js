@@ -79,7 +79,7 @@ router.post("/", jwtVerifier.verifyToken, (request, response) => {
                 // get product from request body
                 const product = request.body;
                 // return and exist if request is empty
-                if (!product.productName || !product.productPrice || +product.productPrice < 0) {
+                if (!product.productName || +product.productPrice < 0) {
                     response.status(500).send("Data can't be Empty or Bellow 0");
                 }
                 if (!fieldValidator.validateProductName(product.productName)) {
@@ -127,7 +127,7 @@ router.put("/:id", jwtVerifier.verifyToken, (request, response) => {
             try {
                 // get product from request body
                 const product = request.body;
-                if (!product.productName || !product.productPrice || +product.productPrice < 0) {
+                if (!product.productName.length || !product.productPrice || +product.productPrice < 0) {
                     response.status(500).send("Data can't be Empty or Bellow 0");
                 }
                 if (product.productName && !fieldValidator.validateProductName(product.productName)) {

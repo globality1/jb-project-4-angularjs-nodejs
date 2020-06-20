@@ -24,7 +24,9 @@ export class AddProductComponent implements OnInit {
   constructor(private myProductsService: ProductsService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService) { }
 
   ngOnInit(): void {
-    this.categories = store.getState().shopCategories;
+    store.subscribe(() => {
+      this.categories = store.getState().shopCategories;
+    })
   }
 
   public async addProduct(addProductForm: NgForm) {

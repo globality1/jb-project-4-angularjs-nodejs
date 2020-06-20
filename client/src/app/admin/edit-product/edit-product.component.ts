@@ -27,6 +27,9 @@ export class EditProductComponent implements OnInit {
   }
 
   async ngOnInit() {
+    store.subscribe(() => {
+      this.categories = store.getState().shopCategories;
+    })
     this.id = +this.myActivatedRoute.snapshot.params.id;
     try {
       this.product = await this.myProductsService.getOneProductAsync(this.id);

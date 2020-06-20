@@ -23,6 +23,9 @@ export class AdminComponent implements OnInit {
        return;
       }
     }
+    if(!store.getState().isLoggedIn && localStorage.getItem("token")) {
+      this.myRouter.navigateByUrl("/home")
+    }
   }
   
 }

@@ -33,16 +33,16 @@ async function updatePartialProductAsync(product, fileName) {
 
     let sql = "UPDATE products SET ";
 
-    if (product.productName.length > 0) {
+    if (product.productName) {
         sql += `product_name = '${product.productName}',`
     }
-    if (product.productCategoryId.length > 0) {
+    if (product.productCategoryId) {
         sql += ` product_category_id = '${product.productCategoryId}',`
     }
-    if (product.productPrice.length > 0) {
+    if (product.productPrice) {
         sql += `product_price = '${product.productPrice}',`
     }
-    if (fileName.length > 0) {
+    if (fileName) {
         sql += `product_image = '${fileName}',`
     }
 

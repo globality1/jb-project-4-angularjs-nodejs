@@ -21,7 +21,7 @@
             <mat-label>Product Price</mat-label>
             <input type="number" matNativeControl [(ngModel)]="product.productPrice" name="productPrice" min="0" max="10000" required #productPrice="ngModel">
             <mat-error *ngIf="productPrice.errors?.required && productPrice.touched">Missing Product Price</mat-error>
-            <mat-error *ngIf="productPrice.errors?.min || productPrice.errors.max || productName.errors?.invalid">Price must be above 0</mat-error>
+            <mat-error *ngIf="productPrice.errors?.min || productPrice.errors?.max || productName.errors?.invalid">Price must be above 0</mat-error>
         </mat-form-field>
         <br />
         <br />
