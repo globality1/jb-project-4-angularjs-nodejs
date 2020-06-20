@@ -52,13 +52,6 @@
 }
 
 
-/* change in display for mobile */
-@media only screen and (max-width: 768px) {
-    .hideCartButton {
-        display: none;
-  }
-} 
-
 .hideCartButton {
     float: right;
     width: 25px;

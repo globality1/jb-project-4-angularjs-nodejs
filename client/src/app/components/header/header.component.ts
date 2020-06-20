@@ -12,6 +12,7 @@ import { UserModel } from 'src/app/models/user-model';
 export class HeaderComponent implements OnInit {
 
   public user: UserModel = new UserModel;
+  public isLoggedIn: boolean;
 
   constructor(private myRouter: Router, private myAuthService: AuthService) { }
 
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
       if (store.getState().user) {
         this.user = store.getState().user
       }
+      this.isLoggedIn = store.getState().isLoggedIn
     })
     if (store.getState().isLoggedIn) {
       this.user = store.getState().user

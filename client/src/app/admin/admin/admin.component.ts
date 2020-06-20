@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AdminComponent implements OnInit {
 
   public product: ProductModel;
+  public clicked: boolean;
 
   constructor(private myRouter: Router, private myAuthService: AuthService ) { }
 
@@ -26,6 +27,15 @@ export class AdminComponent implements OnInit {
     if(!store.getState().isLoggedIn && localStorage.getItem("token")) {
       this.myRouter.navigateByUrl("/home")
     }
+
+  }
+
+  public addNewProductButton() {
+     if(this.myRouter.url === "/admin/add") {
+      this.myRouter.navigateByUrl("/admin");
+      return;
+     }
+     this.myRouter.navigateByUrl("admin/add")
   }
   
 }

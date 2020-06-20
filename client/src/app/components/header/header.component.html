@@ -4,7 +4,7 @@
         </div>
         <div class="col-sm-6">
             <div class="welcome" *ngIf="user.firstName"> Welcome {{user.firstName}}
-                <button mat-raised-button color="warn" *ngIf="user.lastName" (click)="logout()">Logout</button>
+                <button mat-raised-button color="warn" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
             </div>
         </div>
 </div>

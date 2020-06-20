@@ -3,9 +3,7 @@
         <div class="container-fluid">
             <div class="jumbotron mainTitle">
                 <h1>Admin Panel</h1>
-                    <a routerLink="/admin/add" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <button class="addProductButtonDiv" mat-raised-button color="primary">+</button>
-                    </a>
+                <button class="addProductButtonDiv" (click)="addNewProductButton()" mat-raised-button color="primary">+</button>
             </div>
             <div class="jumbotron">
                 <div>

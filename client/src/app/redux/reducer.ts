@@ -55,7 +55,8 @@ export class Reducer {
             // action when doing log out  
             case ActionType.Logout:
                 newAppState.isLoggedIn = false;
-                newAppState.user = null;
+                newAppState.user = {};
+                newAppState.user.firstName = "guest"
                 newAppState.token = null;
                 newAppState.isAdmin = 0;
                 newAppState.products = null;

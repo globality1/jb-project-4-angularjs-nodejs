@@ -61,8 +61,8 @@ export class AddProductComponent implements OnInit {
         this.error = "file is missing"
         return;
       }
-      addProductForm.controls['productCategory'].setErrors({ 'invalid': false });
-      addProductForm.controls['productCategory'].disable();
+
+      
       // check file is in correct size
       if (this.product.productImage) {
         if (this.product.productImage.size > 1000000) {
