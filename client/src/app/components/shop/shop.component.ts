@@ -2,7 +2,6 @@ import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { store } from 'src/app/redux/store';
 import { ActionType } from 'src/app/redux/actionType';
-import { PercentPipe } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 
@@ -28,17 +27,21 @@ export class ShopComponent implements OnInit {
           await this.myCartService.checkCartExisting();
           await this.myCartService.getUserShoppingCartItems();
           this.myRouter.navigateByUrl("/shop");
+          return;
         }
     }
     if (!store.getState().isLoggedIn && !localStorage.getItem("token")) {
       this.myRouter.navigateByUrl("/home");
+      return;
     }
     if (!store.getState().isLoggedIn && localStorage.getItem("token")) {
       this.myRouter.navigateByUrl("/shop");
+      return;
     }
     if (store.getState().isLoggedIn) {
       await this.myCartService.checkCartExisting();
       await this.myCartService.getUserShoppingCartItems();
+      return;
     }
     // remove orderItems from state so it will reset it self
     store.dispatch({ type: ActionType.SetOrderItems, payload: { orderItems: [] } })

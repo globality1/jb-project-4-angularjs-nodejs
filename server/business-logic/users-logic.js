@@ -27,7 +27,6 @@ async function getOneUserAsync(uuid) {
 // add new user to data source
 async function addUserAsync(user) {
     // check if email already exists in DB
-    console.log(user);
     const emailCheck = await checkIfEmailExist(user.email);
     const personalIdCheck = await checkIfPersonalIdExist(user.personalId) 
     user.uuid = uuid.v4();
@@ -42,7 +41,6 @@ async function addUserAsync(user) {
         };
     }
     // return response otherwise
-    console.log("here")
     return emailCheck ? {message: personalIdCheck} : { message: emailCheck };
 }
 

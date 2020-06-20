@@ -44,7 +44,7 @@ async function validateUserFullyAsync(user) {
 
 
 // token generation - giving it 12h lifetime
-async function generateToken(user) {
+function generateToken(user) {
     const token = jwt.sign({ user }, config.jwt.secretKey, {
         expiresIn: '12h'
     });

@@ -11,9 +11,9 @@ h1 {
 
 .welcome {
     float: right;
-    margin-right: 25px;
+    padding: 25px;
     font-size: 25px;
-    margin-top: 30px;
+    
 }
 
 .shopLogo {

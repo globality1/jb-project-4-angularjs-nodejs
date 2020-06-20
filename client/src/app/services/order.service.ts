@@ -14,7 +14,7 @@ export class OrderService {
 
   // create new order in data source
   public createNewOrder(order: OrderModel): Promise<any> {
-    return this.http.post<OrderModel>(apiBaseURL + "/orders/new", order, { headers: authHeaders.createHeader(store.getState().token) } ).toPromise();
-}
+    return this.http.post<OrderModel>(apiBaseURL + "/orders/new", order, { headers: authHeaders.createHeader(store.getState().token) }).toPromise();
+  }
 
 }

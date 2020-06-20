@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { store } from 'src/app/redux/store';
-import { UserShoppingCartItemsService } from 'src/app/services/user-shopping-cart-items';
+import { UserShoppingCartActionsService } from 'src/app/services/user-shopping-cart-ations';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
-import { ActionType } from 'src/app/redux/actionType';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -15,7 +14,7 @@ export class ProductCardComponent implements OnInit {
 
   public newCartItem = new ShoppingCartItemModel;
 
-  public constructor(private myShoppingCartActions: UserShoppingCartItemsService, private myAuthService: AuthService, private myRouter: Router) { };
+  public constructor(private myShoppingCartActions: UserShoppingCartActionsService, private myAuthService: AuthService, private myRouter: Router) { };
 
   @Input()
   public productId: number;

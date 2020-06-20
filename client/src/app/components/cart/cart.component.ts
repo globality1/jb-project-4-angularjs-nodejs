@@ -2,8 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { store } from 'src/app/redux/store';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
 import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
-import { ActionType } from 'src/app/redux/actionType';
-import { UserShoppingCartItemsService } from 'src/app/services/user-shopping-cart-items';
+import { UserShoppingCartActionsService } from 'src/app/services/user-shopping-cart-ations';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartModel } from 'src/app/models/cart-model';
@@ -28,7 +27,7 @@ export class CartComponent implements OnInit {
   @Output()
   public hideCart: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private myCartService: userShoppingCartService, private myCartItemsService: UserShoppingCartItemsService, private myAuthService: AuthService, private myRouter: Router) { }
+  constructor(private myCartItemsService: UserShoppingCartActionsService, private myAuthService: AuthService, private myRouter: Router) { }
 
   async ngOnInit() {
     // subscribe for changes in store for price changes

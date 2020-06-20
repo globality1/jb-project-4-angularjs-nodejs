@@ -11,7 +11,7 @@ const shoppingCartItemController = require("./controllers/shopping-cart-item-con
 const categoriesController = require("./controllers/categories-controller");
 const homePageInformationController = require("./controllers/home-page-information-controller");
 const ordersController = require("./controllers/orders-controller");
-const fileUpload = require("express-fileupload");
+const rateLimit = require("express-rate-limit");
 const fs = require("fs");
 const cors = require("cors");
 const io = require("socket.io");
@@ -24,7 +24,13 @@ server.use(cors({ origin: "http://localhost:4200", credentials: true }));
 // giving higher limit for files
 server.use(express.json({limit: '50mb'}));
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-server.use(fileUpload());
+
+// Prevent DOS/DDOS attacks: 
+server.use("/api/", rateLimit({
+    windowMs: 2000, // 2 seconds
+    max: 1000, // taking in considaration all the images requests
+    message: "Please do not try to mess with out server, thank you?" // 
+}));
 
 // removes any tags from any values that goes into the system
 server.use(sanitize);
@@ -34,7 +40,7 @@ if (!fs.existsSync(__dirname + "/uploads/products")) {
     fs.mkdirSync(__dirname + "/uploads/products");
 }
 
-
+// server api paths
 server.use("/api/auth", authController);
 server.use("/api/users", usersController);
 server.use("/api/products", productsController);

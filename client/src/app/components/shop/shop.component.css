@@ -17,13 +17,15 @@
 }
 
 /* change in display for mobile */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1008px) {
     .e-splitter.e-splitter-horizontal {
         display: inline-block;
   }
 } 
 
-
+app-cart {
+    min-width: 450px;
+}
 .cartIcon {
     float: left;
     z-index: 5000;

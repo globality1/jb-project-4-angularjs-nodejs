@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { store } from 'src/app/redux/store';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { ActionType } from 'src/app/redux/actionType';
+import { UserModel } from 'src/app/models/user-model';
 
 @Component({
   selector: 'app-header',
@@ -11,24 +11,21 @@ import { ActionType } from 'src/app/redux/actionType';
 })
 export class HeaderComponent implements OnInit {
 
-  public name: string;
-  public isLoggedIn: boolean;
+  public user: UserModel = new UserModel;
 
   constructor(private myRouter: Router, private myAuthService: AuthService) { }
 
   ngOnInit(): void {
     // set first default values
-    this.name = "Guest";
+    this.user.firstName = "Guest";
     // subscribe to store
     store.subscribe(() => {
       if (store.getState().user) {
-        this.name = store.getState().user.firstName;
-        this.isLoggedIn = store.getState().isLoggedIn;
+        this.user = store.getState().user
       }
     })
     if (store.getState().isLoggedIn) {
-      this.name = store.getState().user.firstName;
-      this.isLoggedIn = store.getState().isLoggedIn;
+      this.user = store.getState().user
     }
   }
 
@@ -37,7 +34,5 @@ export class HeaderComponent implements OnInit {
     this.myAuthService.logout();
     this.myRouter.navigateByUrl("/home");
   }
-
-
 
 }

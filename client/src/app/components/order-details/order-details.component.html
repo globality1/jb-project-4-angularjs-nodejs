@@ -13,9 +13,8 @@
                         <div class="col-sm-4">
                     <h2>Shipping Details</h2>
                 </div>
-                    <div class="detailsFillInButton col-sm-1"><button mat-raised-button color="primary" (click)="fillInAddressDetails(orderForm)">
-                        Use Account Address
-                    </button>
+                    <div class="detailsFillInButton col-sm-1">
+                        <button mat-raised-button color="primary" (click)="fillInAddressDetails(orderForm)">Use Account Address </button>
                 </div>
                 </div>
                     <hr>
@@ -62,9 +61,7 @@
                     </div>
 
                     <br>
-                    <button mat-raised-button color="primary" (click)="validateOrderForm(orderForm)">
-                        Schedule Delivery
-                    </button>
+                    <button mat-raised-button color="primary" (click)="validateOrderForm(orderForm)">Schedule Delivery</button>
                     <br/>
                     <br/>
                     <div class="errorsDisplay" *ngIf="orderForm.errors?.finalError">{{orderForm.errors?.finalError}}</div>

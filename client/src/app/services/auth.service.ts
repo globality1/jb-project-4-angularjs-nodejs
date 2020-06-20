@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user-model';
 import { store } from '../redux/store';
 import { ActionType } from '../redux/actionType';
-import axios from "axios";
 
 import { apiBaseURL } from 'src/environments/environment';
 import { authHeaders } from 'src/environments/environment';
@@ -17,7 +16,7 @@ export class AuthService {
     constructor(private http: HttpClient) { }
 
     private authLogin(credentials): Promise<UserModel[]> {
-        return this.http.post<UserModel[]>("http://localhost:3000/api/auth/login", credentials).toPromise();
+        return this.http.post<UserModel[]>(apiBaseURL + "/auth/login", credentials).toPromise();
     }
 
     // pass login data to the data source and pass it to store it in the app
@@ -33,7 +32,7 @@ export class AuthService {
     }
 
     private getUserByToken(token: string): Promise<UserModel> {
-        return this.http.post<UserModel>("http://localhost:3000/api/auth/relogin", token, { headers: authHeaders.createHeader(store.getState().token) }).toPromise()
+        return this.http.post<UserModel>(apiBaseURL + "/auth/relogin", token, { headers: authHeaders.createHeader(store.getState().token) }).toPromise()
     }
 
     public async reLogin(token: string) {

@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ProductModel } from 'src/app/models/product-model';
 import { store } from 'src/app/redux/store';
 import { CategoriesModel } from 'src/app/models/categories-model';
-import { ProductFiltersService } from 'src/app/services/product-filters.service';
+import { ProductFiltersService } from 'src/app/services/filters-for-products';
 import { ProductsService } from 'src/app/services/products.service';
 import { ActionType } from 'src/app/redux/actionType';
 import { ShopCategoriesService } from 'src/app/services/categories.service';
@@ -55,49 +55,32 @@ export class ProductsComponent implements OnInit {
   public filterProductsByCategory(id: number) {
     this.categoryId = id;
     // check if id is 0 and there is input in the search field
-    if (id === 0 && this.searchValue) {
-      // filter search value
-      this.filterProductsBySearch()
-      return;
-    }
-    // check if id is 0 and no search value
-    if (id === 0 && !this.searchValue) {
-      // set display of all products
-      this.productsDisplay = this.products;
-      return;
-    }
-    // if id not 0, and search value exist
-    if (this.searchValue && id > 0) {
-      // filter all products by search value
-      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
-      // filter in the search filtered products
-      this.productsDisplay = this.productFilters.filterByCategory(this.productsDisplay, id);
-      return;
-    }
-    // if id 0 and no input
-    this.productsDisplay = this.productFilters.filterByCategory(this.products, id);
-    return;
+    this.filterWithBoth()
   }
 
   // function to filter by search input
   public filterProductsBySearch() {
-    if (this.searchValue.length > 0 && this.categoryId === 0) {
-      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
-      return;
-    }
-    if (this.searchValue.length > 0 && this.categoryId > 0) {
-      this.filterProductsByCategory(this.categoryId);
-      return;
-    }
-    if (this.searchValue.length === 0 && this.categoryId > 0) {
-      this.filterProductsByCategory(this.categoryId);
-      return;
-    }
-    else if (this.searchValue.length === 0) {
-      this.productsDisplay = this.products;
-    }
+    this.filterWithBoth()
   }
 
+  // summarize filtering of both working together
+  public filterWithBoth() {
+    if(this.searchValue && this.categoryId > 0) {
+    // filter first all products under same category
+    this.productsDisplay = this.productFilters.filterByCategory(this.products, this.categoryId);
+    // filter in the search filtered products
+    this.productsDisplay = this.productFilters.filterBySearch(this.productsDisplay, this.searchValue.toLowerCase());
+    }
+    if(this.searchValue && this.categoryId === 0) {
+      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
+    }
+    if(!this.searchValue && !this.categoryId) {
+      this.productsDisplay = this.products;
+    }
+    if(!this.searchValue && this.categoryId > 0) {
+      this.productsDisplay = this.productFilters.filterByCategory(this.products, this.categoryId);
+    }
+  }
 
 }
 

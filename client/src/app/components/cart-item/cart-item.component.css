@@ -12,10 +12,8 @@
     width: 30px;
 }
 
-.highlighted { 
-    background: yellow;
-}
-
-.highlightedNone { 
-    background: transparent;
+table {
+    text-align: center;
+    font-size: 15px;
+    width: 100%;
 }

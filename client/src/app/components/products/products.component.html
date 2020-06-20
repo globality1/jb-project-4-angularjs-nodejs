@@ -20,7 +20,7 @@
                         (click)="filterProductsByCategory(0)">All</button>
                     <div *ngFor="let c of shopCategories">
                         <button class="categoryButton" mat-stroked-button color="primary"
-                        [ngClass]="{'usedRightNow': c.categoryId === categoryId }" (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
+                        [ngClass]="{usedRightNow: c.categoryId === categoryId }" (click)="filterProductsByCategory(c.categoryId)">{{c.categoryName}}</button>
                     </div>
                 </div>
             </div>

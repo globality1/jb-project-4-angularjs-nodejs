@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CredentialsModel } from 'src/app/models/credentials-model';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { FieldValidationService } from 'src/app/services/field-validations';
-import { ShopCategoriesService } from 'src/app/services/categories.service';
 import { store } from 'src/app/redux/store';
 import { NgForm } from '@angular/forms';
 

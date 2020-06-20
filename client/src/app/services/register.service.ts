@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NewUserModel } from '../models/new-user-model';
+import { apiBaseURL } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class RegisterService {
 
     // register new user
     public registerNewUser(user): Promise<NewUserModel[]> {
-        return this.http.post<NewUserModel[]>("http://localhost:3000/api/users", user).toPromise();
+        return this.http.post<NewUserModel[]>(apiBaseURL + "/users", user).toPromise();
     }
 
 }

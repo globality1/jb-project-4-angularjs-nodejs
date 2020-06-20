@@ -14,7 +14,9 @@ export class CheckOutComponent implements OnInit {
   ngOnInit(): void {
     if(!store.getState().isLoggedIn || store.getState().cartItems.length === 0) {
       this.myRouter.navigateByUrl("/home");
-      }
+    }
+    if(!store.getState().isLoggedIn && localStorage.getItem("token")) {
+      this.myRouter.navigateByUrl("/shop");
+    }
   }
-
 }

@@ -25,15 +25,9 @@
         <div class="row">
             <div class="col-1">
             </div>
-            <div class="col-3 cartItemsInformation">
-                Name
-            </div>
-            <div class="col-2 cartItemsInformation">
-                Qt.
-            </div>
-            <div class="col-3 cartItemsInformation">
-                Price
-            </div>
+              <div class="col-3 cartItemsInformation">Name</div>
+              <div class="col-2 cartItemsInformation">Qt.</div>
+              <div class="col-3 cartItemsInformation">Price</div>
             <div class="col-2"></div>
         </div>
         <div class="innerCartItemInformation container">
@@ -42,19 +36,16 @@
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div *ngIf="cartProducts && !cartProducts.length" class="empty">
-                Cart is Empty
-            </div>
+            <div *ngIf="cartProducts && !cartProducts.length" class="empty">Cart is Empty</div>
             <div *ngFor="let p of cartProducts" class="cartItemInfo row">
                 <div class="col-8">
-                    <app-cart-item itemId={{p.id}} productName={{p.productName}} totalPrice={{p.totalPrice}}
+                    <app-cart-item productName={{p.productName}} totalPrice={{p.totalPrice}}
                         productQuantity={{p.quantity}} productImageName={{p.productImageName}} highlight={{p.highlight}}
                         searchValue={{searchValue}}>
                     </app-cart-item>
                 </div>
                 <div *ngIf="allowEdit" class="col-2 removeButtonDiv">
-                    <button class="removeItemButton" mat-raised-button color="warn"
-                        (click)="removeItemFromCart(p.productId)">X</button>
+                    <button class="removeItemButton" mat-raised-button color="warn" (click)="removeItemFromCart(p.productId)">X</button>
                 </div>
             </div>
             <br />

@@ -21,12 +21,15 @@ export class AppState {
     public constructor() {
         this.socket = io.connect("http://localhost:3000");
         this.user;
-        this.isLoggedIn;;
-        this.isAdmin;;
+        this.isLoggedIn;
+        this.isAdmin;
         this.products;
         this.cart;
         this.cartItems;
         this.orderItems;
+        if(sessionStorage.getItem("orderItems")){
+            this.orderItems = JSON.parse(sessionStorage.getItem("orderItems"));
+        };
         this.cartTotalPrice;
         if(localStorage.getItem("token")){
             this.token = localStorage.getItem("token").replace(/"/gi, "");

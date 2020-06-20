@@ -5,8 +5,13 @@ div {
     overflow: auto;
 }
 
-div, div > * { outline: 1px solid black; }
-header, footer { grid-column: span 12;grid-row: span 1;}
-main { grid-column: span 12; height: 100%; grid-row: span 10; }
+/* div, div > * { outline: 1px solid black; } */
+header, footer { grid-column: span 12;grid-row: span 1; width: 100%; background-color: #d5d9dd; box-shadow: 11px 0px 27px black;}
+main { grid-column: span 12; height: 100%; grid-row: span 10; margin-top: 15px;}
+
+header {
+    height: 80px;
+}
+
 
 

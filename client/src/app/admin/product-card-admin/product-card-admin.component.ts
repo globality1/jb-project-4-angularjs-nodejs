@@ -21,9 +21,5 @@ export class ProductCardComponentAdmin {
 
   @Input() 
   public productPrice: number;
-
-  public editProduct(){
-    this.myRouter.navigateByUrl("/admin/edit/" + this.productId);
-  }
    
 }

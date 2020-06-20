@@ -15,8 +15,9 @@ export class OrderCompleteComponent implements OnInit {
   constructor(private myRouter: Router, ) { }
 
   ngOnInit(): void {
+    this.orderItems = [];
     // returns client to shop if orderItems is empty
-    if (store.getState().orderItems.length === 0) {
+    if (!store.getState().orderItems.length) {
       this.myRouter.navigateByUrl("/shop");
     }
     this.orderItems = store.getState().orderItems;
@@ -25,6 +26,7 @@ export class OrderCompleteComponent implements OnInit {
 
   // buildng the txt file content
   public constructTXTExport() {
+    this.orderItems = store.getState().orderItems;
     let textData = 'Thank you for ordering with us!';
     textData += '\r\n';
     textData += '\r\n';
@@ -33,11 +35,11 @@ export class OrderCompleteComponent implements OnInit {
     let totalPrice = 0;
     for (let i = 0; i < this.orderItems.length; i++) {
       totalPrice = totalPrice + this.orderItems[i].totalPrice;
-      textData += this.orderItems[i].quantity + " X " + this.orderItems[i].productName + " = " + "₪" + this.orderItems[i].totalPrice;
+      textData += this.orderItems[i].quantity + " X " + this.orderItems[i].productName + " = " + "₪" + this.orderItems[i].totalPrice.toFixed(2);
       textData += '\r\n';
     }
     textData += '\r\n';
-    textData += "Total Price of the order: " + "₪" + totalPrice;
+    textData += "Total Price of the order: " + "₪" + totalPrice.toFixed(2);
     return textData;
   }
 

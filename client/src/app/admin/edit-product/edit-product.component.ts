@@ -76,7 +76,7 @@ export class EditProductComponent implements OnInit {
       await this.myProductsService.updateProductAsync(this.product);
 
       store.getState().socket.emit("update-from-app", 'Success');
-      // redirect back to admin
+
       setTimeout(() => this.myRouter.navigateByUrl("/admin"), 1000);
     }
     catch (err) {

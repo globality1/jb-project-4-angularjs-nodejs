@@ -1,7 +1,7 @@
 app-product-card-admin {
     float: right;
     width: 150px;
-    margin-right: 30px;
+    margin-right: 20px;
     margin-top: 10px;
     text-align: center;
     box-shadow: 2px 2px 2px 2px black;
@@ -39,11 +39,12 @@ app-product-card-admin {
 
 .categoryButton {
     margin-right: 5px;
+    margin-left: 10px;
 }
 
 .jumbotron-filters {
     overflow: auto;
     height: 100%!important;
     height: 100px;
-    padding: 30px;
+    padding: 15px;
 }

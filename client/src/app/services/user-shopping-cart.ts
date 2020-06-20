@@ -28,7 +28,7 @@ export class userShoppingCartService {
     public async getUserShoppingCart(): Promise<CartModel[]> {
         const uuid = store.getState().user.uuid;
         return new Promise<CartModel[]>((resolve, reject) => {
-            axios.get<CartModel[]>(apiBaseURL + "/cart/information/" + uuid, { headers: authHeaders.createHeader(store.getState().token) })
+            axios.get<CartModel[]>(apiBaseURL + "/cart/information/" + uuid, { headers: authHeaders.createHeader(store.getState().token)})
                 .then(response => resolve(response.data))
                 .catch(err => reject(err));
         });
@@ -38,7 +38,7 @@ export class userShoppingCartService {
     public async getUserShoppingCartItems(): Promise<ShoppingCartItemModel[]> {
         let shoppingCartItems = await this.getUserShoppingCartItemsFromDataSource();
         // if no items, we will set it empty
-        if(shoppingCartItems === undefined) {
+        if (shoppingCartItems === undefined) {
             shoppingCartItems = [];
         }
         if (shoppingCartItems) {

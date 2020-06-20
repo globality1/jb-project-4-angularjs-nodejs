@@ -1,6 +1,5 @@
 export class ShoppingCartItemModel {
     public constructor(
-        public id?: number,
         public productName?: string,
         public productId?: number,
         public quantity?: number,

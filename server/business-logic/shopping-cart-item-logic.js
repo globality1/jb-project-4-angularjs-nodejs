@@ -11,16 +11,16 @@ async function addItemToCartAsync(newItem) {
 };
 
 // remove shopping cart item
-async function removeItemToCartAsync(id) {
-    const sql = "DELETE FROM shopping_cart_items WHERE id = ? ";
-    await dal.executeAsync(sql, [id]);
-    return id;
+async function removeItemFromCartAsync(cartId, productId) {
+    const sql = "DELETE FROM shopping_cart_items WHERE shopping_cart_id = ? and product_id = ?";
+    await dal.executeAsync(sql, [cartId, productId]);
+    return productId;
 };
 
 // remove all shopping cart item
-async function removeAllItemFromCartAsync(cartId, productId) {
-    const sql = "DELETE FROM shopping_cart_items WHERE shopping_cart_id = ? and product_id = ?";
-    await dal.executeAsync(sql, [cartId, productId]);
+async function removeAllItemFromCartAsync(cartId) {
+    const sql = "DELETE FROM shopping_cart_items WHERE shopping_cart_id = ?";
+    await dal.executeAsync(sql, [cartId]);
     return cartId;
 };
 
@@ -28,5 +28,5 @@ async function removeAllItemFromCartAsync(cartId, productId) {
 module.exports = {
     addItemToCartAsync,
     removeAllItemFromCartAsync,
-    removeItemToCartAsync
+    removeItemFromCartAsync
 };
