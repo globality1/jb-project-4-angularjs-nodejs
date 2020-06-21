@@ -8,8 +8,31 @@ export class ProductFiltersService {
 
   constructor() { }
 
+    // ssort of balancer for the filtering functions
+    public filterProducts(products: ProductModel[], productsToDisplay: ProductModel[], categoryId?: number, searchValue?: string) {
+      if (searchValue && categoryId > 0) {
+        // filter first all products under same category
+        productsToDisplay = this.filterByCategory(products, categoryId);
+        // filter in the search filtered products
+        productsToDisplay = this.filterBySearch(productsToDisplay, searchValue.toLowerCase());
+        return productsToDisplay;
+      }
+      if (searchValue && categoryId === 0) {
+        productsToDisplay = this.filterBySearch(products, searchValue.toLowerCase());
+        return productsToDisplay;
+      }
+      if (!searchValue && (categoryId === 0 || !categoryId)) {
+        productsToDisplay = products;
+        return productsToDisplay;
+      }
+      if (!searchValue && categoryId > 0) {
+        productsToDisplay = this.filterByCategory(products, categoryId);
+        return productsToDisplay;
+      }
+    }
+
   // filter all products with given value from products array
-  public filterBySearch(products: ProductModel[], value: string) {
+  private filterBySearch(products: ProductModel[], value: string) {
     let newProductsDisplay: ProductModel[];
     newProductsDisplay = [];
     for (let p in products) {
@@ -21,7 +44,7 @@ export class ProductFiltersService {
   }
 
   // filters all products with given category from products array
-  public filterByCategory(products: ProductModel[], id: number) {
+  private filterByCategory(products: ProductModel[], id: number) {
     let newProductsToDisplay: ProductModel[];
     newProductsToDisplay = [];
     for (let i = 0; i < products.length; i++) {

@@ -27,7 +27,7 @@ export class OrderComponent implements OnInit {
 
   constructor(private myFieldValidationsService: FieldValidationService, private myShoppingCart: userShoppingCartService, private myRouter: Router, private myOrderService: OrderService, private myAuthService: AuthService) { }
 
-  ngOnInit(): void {
+  ngOnInit()  {
     // setting min order date of tomorrow
     this.todayDate = new Date();
     this.todayDate.setDate(this.todayDate.getDate() + 1);

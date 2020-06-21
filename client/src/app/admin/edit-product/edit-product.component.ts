@@ -36,7 +36,7 @@ export class EditProductComponent implements OnInit {
       this.categories = store.getState().shopCategories;
     }
     catch (err) {
-      this.error = err.message
+      this.error = "Please contact Admin"
     }
   }
 

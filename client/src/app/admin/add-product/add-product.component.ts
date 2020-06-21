@@ -27,6 +27,7 @@ export class AddProductComponent implements OnInit {
     store.subscribe(() => {
       this.categories = store.getState().shopCategories;
     })
+    this.categories = store.getState().shopCategories;
   }
 
   public async addProduct(addProductForm: NgForm) {
@@ -62,7 +63,6 @@ export class AddProductComponent implements OnInit {
         return;
       }
 
-      
       // check file is in correct size
       if (this.product.productImage) {
         if (this.product.productImage.size > 1000000) {
@@ -75,6 +75,7 @@ export class AddProductComponent implements OnInit {
       // create new product
       await this.myProductsService.addProductAsync(this.product);
 
+      // emit of socket for the new updated product
       store.getState().socket.emit("update-from-app", 'Success');
       // redirect back to admin
       setTimeout(() => this.myRouter.navigateByUrl("/admin"), 1000);

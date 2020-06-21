@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private myAuthService: AuthService, private myRouter: Router, private myFieldValidationsService: FieldValidationService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   public validateForm(loginForm: NgForm) {

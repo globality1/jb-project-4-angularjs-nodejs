@@ -14,7 +14,7 @@ export class OrderCompleteComponent implements OnInit {
 
   constructor(private myRouter: Router, ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.orderItems = [];
     // returns client to shop if orderItems is empty
     if (!store.getState().orderItems.length) {

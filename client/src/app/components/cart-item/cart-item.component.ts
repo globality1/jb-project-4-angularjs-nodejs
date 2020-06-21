@@ -25,9 +25,6 @@ export class CartItemComponent{
   public totalPrice: number;
 
   @Input()
-  public highlight?: boolean;
-
-  @Input()
   public searchValue?: string;
 
 }

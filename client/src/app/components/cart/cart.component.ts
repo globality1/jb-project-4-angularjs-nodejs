@@ -38,12 +38,9 @@ export class CartComponent implements OnInit {
         this.cart = store.getState().cart;
       }
     })
-    if (store.getState().cartItems) {
-      // get products from store on init
-      this.cartProducts = store.getState().cartItems;
-      // get shop categories from store
-      this.cartTotalAmount = store.getState().cartTotalPrice;
-    }
+    this.cartProducts = store.getState().cartItems;
+    // get shop categories from store
+    this.cartTotalAmount = store.getState().cartTotalPrice;
   }
 
   // clean whole cart from it's products

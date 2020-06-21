@@ -20,10 +20,10 @@ export class ProductsComponentAdmin implements OnInit {
   public productsDisplay: ProductModel[];
   public categoryId: number;
 
-  constructor( private productFilters: ProductFiltersService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
+  constructor(private productFilters: ProductFiltersService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
 
   async ngOnInit() {
-    
+
     // for the filters
     this.categoryId = 0;
 
@@ -32,21 +32,16 @@ export class ProductsComponentAdmin implements OnInit {
 
     // and make products be based on socket if any update / new product event occurs - same for everyone
     store.subscribe(() => {
-      this.products = this.productsDisplay = store.getState().products;
-      this.shopCategories = store.getState().shopCategories
+      if (store.getState().products) {
+        this.products = this.productsDisplay = store.getState().products;
+        this.shopCategories = store.getState().shopCategories
+      }
     });
 
-    if (store.getState().products) {
-      // get products from store on init
-      this.products = this.productsDisplay = store.getState().products;
-      // get shop categories from store
-      this.shopCategories = store.getState().shopCategories;
-    }
-
-    if (!store.getState().products) {
-      this.shopCategories = await this.myShopCategories.setShopCategories();
-      this.products = this.productsDisplay = await this.myProductsService.setShopProducts();
-    }
+    // get shop products from store
+    this.products = this.productsDisplay = store.getState().products;
+    // get shop categories from store
+    this.shopCategories = store.getState().shopCategories;
 
     // socket to update products and view on the products page
     store.getState().socket.on("update-from-server", (products: ProductModel[]) => {
@@ -54,37 +49,18 @@ export class ProductsComponentAdmin implements OnInit {
       this.products = this.productsDisplay = products;
     });
   }
-  
-  // set category id and filter by it
+
   public filterProductsByCategory(id: number) {
     this.categoryId = id;
     // check if id is 0 and there is input in the search field
-    this.filterWithBoth()
+    this.productsDisplay = this.productFilters.filterProducts(this.products, this.productsDisplay, this.categoryId, this.searchValue)
   }
 
   // function to filter by search input
   public filterProductsBySearch() {
-    this.filterWithBoth()
+    this.productsDisplay = this.productFilters.filterProducts(this.products, this.productsDisplay, this.categoryId, this.searchValue)
   }
 
-  // summarize filtering of both working together
-  public filterWithBoth() {
-    if(this.searchValue && this.categoryId > 0) {
-    // filter first all products under same category
-    this.productsDisplay = this.productFilters.filterByCategory(this.products, this.categoryId);
-    // filter in the search filtered products
-    this.productsDisplay = this.productFilters.filterBySearch(this.productsDisplay, this.searchValue.toLowerCase());
-    }
-    if(this.searchValue && this.categoryId === 0) {
-      this.productsDisplay = this.productFilters.filterBySearch(this.products, this.searchValue.toLowerCase());
-    }
-    if(!this.searchValue && !this.categoryId) {
-      this.productsDisplay = this.products;
-    }
-    if(!this.searchValue && this.categoryId > 0) {
-      this.productsDisplay = this.productFilters.filterByCategory(this.products, this.categoryId);
-    }
-  }
 }
 
 

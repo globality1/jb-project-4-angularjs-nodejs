@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private myRouter: Router, private myAuthService: AuthService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // set first default values
     this.user.firstName = "Guest";
     // subscribe to store
@@ -29,6 +29,10 @@ export class HeaderComponent implements OnInit {
     if (store.getState().isLoggedIn) {
       this.user = store.getState().user
     }
+    if(store.getState().token) {
+      this.user = await this.myAuthService.reLogin(store.getState().token);
+    }
+
   }
 
   // logout function

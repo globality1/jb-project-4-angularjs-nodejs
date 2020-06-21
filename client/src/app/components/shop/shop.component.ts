@@ -4,6 +4,8 @@ import { store } from 'src/app/redux/store';
 import { ActionType } from 'src/app/redux/actionType';
 import { AuthService } from 'src/app/services/auth.service';
 import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
+import { ProductsService } from 'src/app/services/products.service';
+import { ShopCategoriesService } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-shop',
@@ -17,36 +19,26 @@ export class ShopComponent implements OnInit {
   public cartSize;
   public productsSize;
 
-  constructor(private myRouter: Router, private el: ElementRef, private myAuthService: AuthService, private myCartService: userShoppingCartService) { }
+  constructor(private myRouter: Router, private el: ElementRef, private myAuthService: AuthService, private myCartService: userShoppingCartService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit()  {
     // check if user logged in, if no move him to login page
     if (!store.getState().isLoggedIn && store.getState().token) {
       const user = await this.myAuthService.reLogin(store.getState().token);
       if(user) {
-          await this.myCartService.checkCartExisting();
-          await this.myCartService.getUserShoppingCartItems();
-          this.myRouter.navigateByUrl("/shop");
+          this.getAllShopInfo();
           return;
         }
     }
-    if (!store.getState().isLoggedIn && !localStorage.getItem("token")) {
+    if (!store.getState().isLoggedIn && !store.getState().token) {
       this.myRouter.navigateByUrl("/home");
       return;
     }
-    if (!store.getState().isLoggedIn && localStorage.getItem("token")) {
-      this.myRouter.navigateByUrl("/shop");
-      return;
-    }
     if (store.getState().isLoggedIn) {
-      await this.myCartService.checkCartExisting();
-      await this.myCartService.getUserShoppingCartItems();
+      this.getAllShopInfo()
       return;
     }
-    // remove orderItems from state so it will reset it self
-    store.dispatch({ type: ActionType.SetOrderItems, payload: { orderItems: [] } })
-    this.cartSize = "25%";
-    this.productsSize = "75%";
+
   }
 
   public hideCartFromUser(value: boolean) {
@@ -55,6 +47,14 @@ export class ShopComponent implements OnInit {
      }
     this.hideCart = value;
     this.myDiv.hidden = this.hideCart;
+  }
+
+  private async getAllShopInfo() {
+    await this.myShopCategories.setShopCategories();
+    await this.myProductsService.setShopProducts();
+    await this.myCartService.checkCartExisting();
+    await this.myCartService.getUserShoppingCartItems();
+    return true
   }
 
 }

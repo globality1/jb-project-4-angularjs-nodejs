@@ -5,6 +5,5 @@ export class ShoppingCartItemModel {
         public quantity?: number,
         public totalPrice?: number,
         public productImageName?: string,
-        public cartId?: number,
-        public highlight?: boolean) {}
+        public cartId?: number) {}
 }

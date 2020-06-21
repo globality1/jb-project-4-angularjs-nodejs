@@ -28,11 +28,13 @@ export class RegisterComponent implements OnInit {
 
   constructor(private myRegisterService: RegisterService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService) { }
 
-  ngOnInit(): void {
+  ngOnInit()  {
+
     if (store.getState().isLoggedIn) {
       this.myRouter.navigateByUrl("/shop");
     }
     this.newUser = new NewUserModel();
+    
   }
 
   // inner validation

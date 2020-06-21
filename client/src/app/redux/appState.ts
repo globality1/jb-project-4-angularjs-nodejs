@@ -34,6 +34,6 @@ export class AppState {
         if(localStorage.getItem("token")){
             this.token = localStorage.getItem("token").replace(/"/gi, "");
         }
-        this.orderItems;
+        this.shopCategories;
     }
 }

@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private myRouter: Router, private myHomeService: HomeService) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     try {
       // if customer if logged in, move him to the shop
       if (store.getState().isLoggedIn) {

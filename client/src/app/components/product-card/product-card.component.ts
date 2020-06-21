@@ -30,6 +30,7 @@ export class ProductCardComponent implements OnInit {
 
   ngOnInit() {
     this.newCartItem.quantity = 0;
+    this.newCartItem.cartId = store.getState().cart.id
     store.subscribe(() => {
       if (store.getState().cart)
         this.newCartItem.cartId = store.getState().cart.id
