@@ -1,7 +1,7 @@
 <a routerLink="/admin/edit/{{productId}}">
 <div class="card" >
     <div class="headerImage">
-        <img class="productImage" [src]="'http://localhost:3000/api/images/products/'+imageSource" [alt]="imageSource">
+        <img class="productImage" [src]=" apiBaseURL + '/images/products/' + imageSource" [alt]="imageSource">
     </div>
     <h5 class="card-title">{{productName}}</h5>
     <div class="card-text">

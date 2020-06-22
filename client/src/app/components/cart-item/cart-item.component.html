@@ -1,6 +1,6 @@
 <div class="container" name="itemInfoDiv">
     <div class="row">
-        <div class="cart-item col-1"><img class="cartProductImage" [src]="'http://localhost:3000/api/images/products/'+productImageName" [alt]="productImageName"></div>
+        <div class="cart-item col-1"><img class="cartProductImage" [src]="apiBaseURL + '/images/products/'+productImageName" [alt]="productImageName"></div>
         <!-- <div *ngIf="!highlight" class="cart-item col-4 highlightedNone">{{productName}}</div>
         <div *ngIf="highlight" class="cart-item col-4 highlighted">{{productName}}</div> -->
         <div class="cart-item col-4" [innerHTML]="productName | highlightValue: searchValue"></div>

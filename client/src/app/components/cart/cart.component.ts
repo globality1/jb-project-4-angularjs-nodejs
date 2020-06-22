@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { store } from 'src/app/redux/store';
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
-import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { UserShoppingCartActionsService } from 'src/app/services/user-shopping-cart-ations';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartModel } from 'src/app/models/cart-model';
+import { apiBaseURL } from 'src/environments/environment';
 
 
 @Component({
@@ -20,6 +20,7 @@ export class CartComponent implements OnInit {
   public searchValue: string;
   public cartTotalAmount: number;
   public cart: CartModel;
+  public apiBaseURL;
 
   @Input()
   public allowEdit?: boolean;
@@ -41,6 +42,7 @@ export class CartComponent implements OnInit {
     this.cartProducts = store.getState().cartItems;
     // get shop categories from store
     this.cartTotalAmount = store.getState().cartTotalPrice;
+    this.apiBaseURL = apiBaseURL;
   }
 
   // clean whole cart from it's products

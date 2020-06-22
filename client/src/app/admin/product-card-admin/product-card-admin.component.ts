@@ -1,5 +1,5 @@
-import { Component, Input} from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit} from '@angular/core';
+import { apiBaseURL } from 'src/environments/environment';
 
 
 @Component({
@@ -7,9 +7,15 @@ import { Router } from '@angular/router';
   templateUrl: './product-card-admin.component.html',
   styleUrls: ['./product-card-admin.component.css']
 })
-export class ProductCardComponentAdmin {
+export class ProductCardComponentAdmin implements OnInit {
+  public apiBaseURL;
   
-  public constructor(private myRouter: Router) {};
+  public constructor() {};
+
+  ngOnInit() {
+    this.apiBaseURL = apiBaseURL;
+  }
+
   @Input()
   public productId: number;
 

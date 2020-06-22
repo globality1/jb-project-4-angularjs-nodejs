@@ -30,18 +30,16 @@ export class UserShoppingCartActionsService {
         cartTotalPrice = cartTotalPrice + addedItem.totalPrice;
         let itemExist = 0
         for (let i = 0; i < cartItems.length; i++) {
-          console.log(cartItems[i])
           if (cartItems[i].productId === addedItem.productId) {
             cartItems[i].quantity = cartItems[i].quantity + addedItem.quantity;
             cartItems[i].totalPrice = cartItems[i].totalPrice + addedItem.totalPrice;
             itemExist++
           }
         }
+        // // add new item to cart items
         if(itemExist === 0) {
           cartItems.push(addedItem);
         }
-        // // add new item to cart items
-        // cartItems.push(addedItem);
         // write to store new total price
         store.dispatch({ type: ActionType.SetNewCartTotalPrice, payload: { cartTotalPrice } });
         // write to store new cart items

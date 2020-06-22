@@ -19,7 +19,7 @@
             </mat-form-field>
         </div>
         <div *ngIf="cartProducts && cartProducts.length && allowEdit" class="empty-cart">
-            <button mat-button (click)="cleanCart()"><img src="http://localhost:3000/api/images/main/trash.png"
+            <button mat-button (click)="cleanCart()"><img [src]='apiBaseURL + "/images/main/trash.png"'
                     width="35" height="35" alt="trash"></button>
         </div>
         <div class="row">

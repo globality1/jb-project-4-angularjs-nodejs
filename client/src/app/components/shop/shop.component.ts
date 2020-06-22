@@ -1,7 +1,6 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { store } from 'src/app/redux/store';
-import { ActionType } from 'src/app/redux/actionType';
 import { AuthService } from 'src/app/services/auth.service';
 import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { ProductsService } from 'src/app/services/products.service';

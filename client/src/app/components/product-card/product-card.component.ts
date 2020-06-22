@@ -4,6 +4,7 @@ import { UserShoppingCartActionsService } from 'src/app/services/user-shopping-c
 import { ShoppingCartItemModel } from 'src/app/models/shopping-cart-item-model';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { apiBaseURL } from 'src/environments/environment';
 
 @Component({
   selector: 'app-product-card',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class ProductCardComponent implements OnInit {
 
   public newCartItem = new ShoppingCartItemModel;
+  public apiBaseURL;
 
   public constructor(private myShoppingCartActions: UserShoppingCartActionsService, private myAuthService: AuthService, private myRouter: Router) { };
 
@@ -30,11 +32,14 @@ export class ProductCardComponent implements OnInit {
 
   ngOnInit() {
     this.newCartItem.quantity = 0;
-    this.newCartItem.cartId = store.getState().cart.id
+    if(store.getState().cart) {
+      this.newCartItem.cartId = store.getState().cart.id
+    }
     store.subscribe(() => {
       if (store.getState().cart)
         this.newCartItem.cartId = store.getState().cart.id
     });
+    this.apiBaseURL = apiBaseURL;
   }
 
   public async addProductToCart() {

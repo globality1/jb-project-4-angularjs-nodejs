@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { RegisterService } from 'src/app/services/register.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FieldValidationService } from 'src/app/services/field-validations';
-import { userShoppingCartService } from 'src/app/services/user-shopping-cart';
 import { store } from 'src/app/redux/store';
 import { NgForm } from '@angular/forms';
 
@@ -34,7 +33,7 @@ export class RegisterComponent implements OnInit {
       this.myRouter.navigateByUrl("/shop");
     }
     this.newUser = new NewUserModel();
-    
+
   }
 
   // inner validation

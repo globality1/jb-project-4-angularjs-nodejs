@@ -4,8 +4,6 @@ import { store } from 'src/app/redux/store';
 import { CategoriesModel } from 'src/app/models/categories-model';
 import { ProductFiltersService } from 'src/app/services/filters-for-products';
 import { ActionType } from 'src/app/redux/actionType';
-import { ProductsService } from 'src/app/services/products.service';
-import { ShopCategoriesService } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-products-admin',
@@ -20,7 +18,7 @@ export class ProductsComponentAdmin implements OnInit {
   public productsDisplay: ProductModel[];
   public categoryId: number;
 
-  constructor(private productFilters: ProductFiltersService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
+  constructor(private productFilters: ProductFiltersService) { }
 
   async ngOnInit() {
 

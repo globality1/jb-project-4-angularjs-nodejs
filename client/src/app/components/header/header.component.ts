@@ -31,6 +31,9 @@ export class HeaderComponent implements OnInit {
     }
     if(store.getState().token) {
       this.user = await this.myAuthService.reLogin(store.getState().token);
+      if(this.user.token) {
+        this.isLoggedIn = true;
+      }
     }
 
   }
