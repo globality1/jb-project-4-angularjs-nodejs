@@ -45,7 +45,11 @@ export class ProductCardComponent implements OnInit {
   public async addProductToCart() {
     try {
       // check and confirm that quantity is above 0 to not add negative price
-      if (this.newCartItem.quantity <= 0) {
+      if (this.newCartItem.quantity <= 0 || this.newCartItem.quantity > 100) {
+        this.newCartItem.quantity = 0;
+        return;
+      }
+      if (this.newCartItem.quantity  % 1 !== 0) {
         this.newCartItem.quantity = 0;
         return;
       }

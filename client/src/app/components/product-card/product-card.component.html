@@ -24,10 +24,10 @@
                 <form #QuantityForm="ngForm">
                 <div>
                     Please enter amount: <input type="number" [(ngModel)]="newCartItem.quantity" placeholder="Qt."
-                        min="0" required name="quantityField">
+                        min="0" required name="quantityField" max="100" #quantityField="ngModel">
                 </div>
                 <br />
-                <div class="alert alert-danger" *ngIf="newCartItem.quantity <= 0">Quantity should be above 0</div>
+                <div class="alert alert-danger" *ngIf="newCartItem.quantity <= 0">Quantity should be integer 1 - 100</div>
             </form>
             </div>
             <div class="modal-footer">

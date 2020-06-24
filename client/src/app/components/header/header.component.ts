@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
 
   async ngOnInit() {
     // set first default values
+    this.apiBaseURL = apiBaseURL;
     this.user.firstName = "Guest";
     // subscribe to store
     store.subscribe(() => {
@@ -38,8 +39,6 @@ export class HeaderComponent implements OnInit {
         this.isLoggedIn = true;
       }
     }
-    this.apiBaseURL = apiBaseURL;
-
   }
 
   // logout function

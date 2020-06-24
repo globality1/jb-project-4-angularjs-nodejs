@@ -69,4 +69,7 @@
         float: right;
         margin-top: -10px!important;
     }
+    .removeButtonDiv {
+        margin-left: 10px!important;
+    }
 } 

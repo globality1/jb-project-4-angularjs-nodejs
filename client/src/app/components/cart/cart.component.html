@@ -3,7 +3,7 @@
         <h1 *ngIf="allowEdit">Your Cart</h1>
         <h1 *ngIf="!allowEdit">Your Order Information</h1>
         <img *ngIf="allowEdit" class="hideCartButton" (click)="hideCartFromUser()" height="25" width="25"
-            src="/assets/images/hide-cart.svg" />
+            src="/assets/images/hide-cart.png" />
     </div>
     <div class="jumbotron cartInfo">
         <div class="empty" *ngIf="cartProducts && !cartProducts.length && !allowEdit">
@@ -44,7 +44,7 @@
                         searchValue={{searchValue}}>
                     </app-cart-item>
                 </div>
-                <div *ngIf="allowEdit" class="col-2 removeButtonDiv">
+                <div *ngIf="allowEdit" class="removeButtonDiv col-2">
                     <button class="removeItemButton" mat-raised-button color="warn" (click)="removeItemFromCart(p.productId)">X</button>
                 </div>
             </div>

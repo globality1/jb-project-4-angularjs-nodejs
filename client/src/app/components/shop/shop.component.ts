@@ -14,9 +14,10 @@ import { ShopCategoriesService } from 'src/app/services/categories.service';
 export class ShopComponent implements OnInit {
 
   public hideCart: boolean;
-  public myDiv;
-  public cartSize;
-  public productsSize;
+  public myCart;
+  public myProducts;
+  public myProductsPreviousSize;
+
 
   constructor(private myRouter: Router, private el: ElementRef, private myAuthService: AuthService, private myCartService: userShoppingCartService, private myProductsService: ProductsService, private myShopCategories: ShopCategoriesService) { }
 
@@ -37,15 +38,28 @@ export class ShopComponent implements OnInit {
       this.getAllShopInfo()
       return;
     }
-
   }
 
+  // adjusting the size of the products view with the e-pane
   public hideCartFromUser(value: boolean) {
-    if(!this.myDiv) {
-      this.myDiv = this.el.nativeElement.querySelectorAll("div")[1]
-     }
+    // if containers doesn't exist yet - find them
+    if(!this.myCart) {
+      this.myCart = this.el.nativeElement.querySelectorAll(".e-pane")[0];
+      this.myProducts = this.el.nativeElement.querySelectorAll(".e-pane")[1];
+    }
+    // set hidecart as value
     this.hideCart = value;
-    this.myDiv.hidden = this.hideCart;
+    // set hidden as value
+    this.myCart.hidden = this.hideCart;
+    if(value === true) {
+      // save previous size
+      this.myProductsPreviousSize = this.myProducts.style.flexBasis;
+      // set size to 100%
+      this.myProducts.style.flexBasis = "100%"
+      return;
+    };
+    // return previous size
+    this.myProducts.style.flexBasis = this.myProductsPreviousSize;
   }
 
   private async getAllShopInfo() {
