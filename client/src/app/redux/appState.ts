@@ -5,10 +5,10 @@ import { CartModel } from '../models/cart-model';
 import { ShoppingCartItemModel } from '../models/shopping-cart-item-model';
 import { CategoriesModel } from '../models/categories-model';
 
+
 export class AppState {
     public isLoggedIn: boolean;
     public user: UserModel;
-    public isAdmin: number;
     public token: string;
     public cart: CartModel;
     public cartItems: ShoppingCartItemModel[];
@@ -22,7 +22,6 @@ export class AppState {
         this.socket = io.connect("http://localhost:3000");
         this.user;
         this.isLoggedIn;
-        this.isAdmin;
         this.products;
         this.cart;
         this.cartItems;

@@ -164,7 +164,7 @@ export class RegisterComponent implements OnInit {
           this.newUser = new NewUserModel();
           return;
         }
-      this.myRouter.navigateByUrl("/home");
+      this.myRouter.navigateByUrl("");
     }
     catch (err) {
       this.registerError = "Contact Admin for more information"

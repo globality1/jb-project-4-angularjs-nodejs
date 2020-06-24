@@ -65,7 +65,7 @@ export class ProductCardComponent implements OnInit {
       // logs out client if jwt token has timed out
       if (err.status === 401) {
         this.myAuthService.logout();
-        this.myRouter.navigateByUrl("/home");
+        this.myRouter.navigateByUrl("");
       }
     }
   }

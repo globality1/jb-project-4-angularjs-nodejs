@@ -16,7 +16,9 @@ const adminRoutes: Routes = [
     {
         path: "", component: AdminComponent, children: [ // "/admin" (because it is relative to the route in app-routing)
             { path: "add", component: AddProductComponent }, // "/admin/add"
-            { path: "edit/:id", component: EditProductComponent } // "/admin/edit"
+            { path: "edit/:id", component: EditProductComponent }, // "/admin/edit"
+            { path: "", redirectTo: "", pathMatch: "full" },
+            { path: "**", component: AdminComponent }
         ]
     },
 ];

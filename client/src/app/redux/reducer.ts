@@ -16,7 +16,6 @@ export class Reducer {
                 newAppState.user = action.payload.user;
                 newAppState.isLoggedIn = true;
                 newAppState.token = newAppState.user.token.replace(/"/gi, "");
-                newAppState.isAdmin = newAppState.user.isAdmin;
                 localStorage.setItem("token", JSON.stringify(newAppState.user.token));
                 sessionStorage.setItem("token", JSON.stringify(newAppState.user.token));
                 break;
@@ -58,7 +57,6 @@ export class Reducer {
                 newAppState.user = {};
                 newAppState.user.firstName = "guest"
                 newAppState.token = null;
-                newAppState.isAdmin = 0;
                 newAppState.products = null;
                 newAppState.cart = null;
                 newAppState.cartTotalPrice = 0;

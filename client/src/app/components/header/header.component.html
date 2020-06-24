@@ -1,6 +1,6 @@
 <div class="mainDiv row">
         <div class="col-sm-6">
-            <img class="shopLogo" src="http://localhost:3000/api/images/main/logo.png" width="70" height="70" alt="logo">
+            <img class="shopLogo" [src]="apiBaseURL + '/images/main/logo.png'" width="70" height="70" alt="logo">
         </div>
         <div class="col-sm-6">
             <div class="welcome" *ngIf="user.firstName"> Welcome {{user.firstName}}

@@ -22,7 +22,7 @@ export class AdminComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     if(!store.getState().isLoggedIn && store.getState().token) {
       const user = await this.myAuthService.reLogin(store.getState().token);
-      if(!user.isAdmin) {
+      if(user.isAdmin === 0) {
        this.myRouter.navigateByUrl("/shop");
        return;
       }
@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
       return;
     }
 
-    if (store.getState().isLoggedIn && store.getState().isAdmin === 0) {
+    if (store.getState().isLoggedIn && store.getState().user.isAdmin === 0) {
       this.myRouter.navigateByUrl("/shop")
       return;
     }

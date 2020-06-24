@@ -106,7 +106,7 @@ export class OrderComponent implements OnInit {
       if (err.status === 401) {
         const response = await this.myAuthService.logout();
         if (response) {
-          setTimeout(() => this.myRouter.navigateByUrl("/home"), 200);
+          this.myRouter.navigateByUrl("");
           // store dispatch
           return;
         }

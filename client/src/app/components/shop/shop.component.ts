@@ -30,7 +30,7 @@ export class ShopComponent implements OnInit {
         }
     }
     if (!store.getState().isLoggedIn && !store.getState().token) {
-      this.myRouter.navigateByUrl("/home");
+      this.myRouter.navigateByUrl("");
       return;
     }
     if (store.getState().isLoggedIn) {

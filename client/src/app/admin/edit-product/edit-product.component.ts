@@ -7,6 +7,7 @@ import { ProductsService } from 'src/app/services/products.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgForm } from '@angular/forms';
 import { FieldValidationService } from 'src/app/services/field-validations';
+import { apiBaseURL } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-product',
@@ -20,6 +21,7 @@ export class EditProductComponent implements OnInit {
   public categories: CategoriesModel[];
   public error: string;
   public previewImage: any = null;
+  public apiBaseURL;
 
   constructor(private myActivatedRoute: ActivatedRoute, private myProductsService: ProductsService, private myRouter: Router, private myAuthService: AuthService, private myFieldValidationsService: FieldValidationService) {
     // disabled issue when moving from one item to another, without this the view doesn't change on route because it's using same route nd just the id changes
@@ -30,6 +32,7 @@ export class EditProductComponent implements OnInit {
     store.subscribe(() => {
       this.categories = store.getState().shopCategories;
     })
+    this.apiBaseURL = apiBaseURL;
     this.id = +this.myActivatedRoute.snapshot.params.id;
     try {
       this.product = await this.myProductsService.getOneProductAsync(this.id);
@@ -90,7 +93,7 @@ export class EditProductComponent implements OnInit {
         const response = await this.myAuthService.logout();
         // if logout successful, log redirect to home
         if (response) {
-          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          this.myRouter.navigateByUrl("");
           return
         }
       }

@@ -9,13 +9,13 @@ import { OrderCompleteComponent } from './components/order-complete/order-comple
 
 
 const routes: Routes = [
-  { path: "home", component: HomeComponent },
+  { path: "", component: HomeComponent },
   { path: "register", component: RegisterComponent },
   { path: "shop", component: ShopComponent },
   { path: "shop/check-out", component: CheckOutComponent },
   { path: "shop/thank-you", component: OrderCompleteComponent },
   { path: "admin", loadChildren: () => import("./admin/admin.module").then(m => m.AdminModule) }, // Lazy Loading
-  { path: "", redirectTo: "/home", pathMatch: "full" },
+  { path: "", redirectTo: "", pathMatch: "full" },
   { path: "**", component: PageNotFoundComponent }
 ];
 

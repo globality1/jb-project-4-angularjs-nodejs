@@ -3,6 +3,8 @@ import { store } from 'src/app/redux/store';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserModel } from 'src/app/models/user-model';
+import { apiBaseURL } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-header',
@@ -13,6 +15,7 @@ export class HeaderComponent implements OnInit {
 
   public user: UserModel = new UserModel;
   public isLoggedIn: boolean;
+  public apiBaseURL;
 
   constructor(private myRouter: Router, private myAuthService: AuthService) { }
 
@@ -35,13 +38,14 @@ export class HeaderComponent implements OnInit {
         this.isLoggedIn = true;
       }
     }
+    this.apiBaseURL = apiBaseURL;
 
   }
 
   // logout function
   public async logout() {
     this.myAuthService.logout();
-    this.myRouter.navigateByUrl("/home");
+    this.myRouter.navigateByUrl("");
   }
 
 }

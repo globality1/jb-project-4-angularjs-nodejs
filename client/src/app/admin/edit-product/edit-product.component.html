@@ -44,7 +44,7 @@
     <div>
         <input type="file" accept="image/*" id="file" name="product-image" (change)="handleFileInput($event.target.files)">
         <img *ngIf="previewImage" [src]="previewImage" height="100" width="100" />
-        <img *ngIf="!previewImage && product.productImageName" [src]="'http://localhost:3000/api/images/products/' + product.productImageName" height="120">
+        <img *ngIf="!previewImage && product.productImageName" [src]="apiBaseURL + '/images/products/' + product.productImageName" height="120">
         <br />
         <br />
     </div>

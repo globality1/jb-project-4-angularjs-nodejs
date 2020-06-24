@@ -87,7 +87,7 @@ export class AddProductComponent implements OnInit {
         const response = await this.myAuthService.logout();
         // if logout successful, log redirect to home
         if (response) {
-          setTimeout(() => this.myRouter.navigateByUrl("/home"), 300);
+          this.myRouter.navigateByUrl("");
           return
         }
       }

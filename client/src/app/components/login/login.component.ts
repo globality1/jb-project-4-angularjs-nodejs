@@ -51,11 +51,11 @@ export class LoginComponent implements OnInit {
       const response = await this.myAuthService.loginFlow(this.credentials);
       // if user returned, store all data
       if (response) {
-        if (store.getState().isAdmin) {
+        if (store.getState().user.isAdmin) {
           this.myRouter.navigateByUrl("/admin");
           return;
         }
-        else if (!store.getState().isAdmin) {
+        else if (!store.getState().user.isAdmin) {
           this.myRouter.navigateByUrl("/shop");
           return;
         }

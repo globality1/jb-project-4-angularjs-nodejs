@@ -54,7 +54,7 @@ export class CartComponent implements OnInit {
       // logs out client if jwt token has timed out
       if (err.status === 401) {
         this.myAuthService.logout();
-        this.myRouter.navigateByUrl("/home");
+        this.myRouter.navigateByUrl("/");
       }
       // otherwise say to contact admin for this problem
       this.error = "Please try again later";
@@ -70,7 +70,7 @@ export class CartComponent implements OnInit {
       // logs out client if jwt token has timed out
       if (err.status === 401) {
         this.myAuthService.logout();
-        this.myRouter.navigateByUrl("/home");
+        this.myRouter.navigateByUrl("");
       }
       // otherwise say to contact admin for this problem
       this.error = "Please try again later";
