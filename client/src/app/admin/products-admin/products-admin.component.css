@@ -9,6 +9,10 @@ app-product-card-admin {
     min-width: 125px;
 }
 
+.mainProducts {
+    width: 99%;
+}
+
 .container-fluid-products {
     height: 80%!important;
     overflow: hidden;

@@ -34,9 +34,9 @@ export class EditProductComponent implements OnInit {
     })
     this.apiBaseURL = apiBaseURL;
     this.id = +this.myActivatedRoute.snapshot.params.id;
+    this.categories = store.getState().shopCategories;
     try {
       this.product = await this.myProductsService.getOneProductAsync(this.id);
-      this.categories = store.getState().shopCategories;
     }
     catch (err) {
       this.error = "Please contact Admin"

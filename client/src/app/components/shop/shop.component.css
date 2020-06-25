@@ -3,6 +3,9 @@
     max-height: 80%!important;
 }
 
+.mainShop {
+    height: 100%
+}
 
 .e-pane-vertical {
     justify-content: center;
@@ -37,4 +40,8 @@ app-cart {
 
 .cartIcon:hover {
     cursor: pointer;
-  }
+}
+
+.e-splitter .e-split-bar.e-split-bar-horizontal .e-resize-handler::before {
+   font-size: 32px!important;
+}
